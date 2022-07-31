@@ -1,0 +1,212 @@
+{
+    "gameid": "0021500001",
+    "gamedate": "2015-10-27",
+    "event_id": 176,
+    "home": {
+        "name": "Atlanta Hawks",
+        "teamid": 1610612737,
+        "abbreviation": "ATL",
+        "players": [
+            {
+                "lastname": "Korver",
+                "firstname": "Kyle",
+                "playerid": 2594,
+                "jersey": "26",
+                "position": "G"
+            },
+            {
+                "lastname": "Sefolosha",
+                "firstname": "Thabo",
+                "playerid": 200757,
+                "jersey": "25",
+                "position": "G-F"
+            },
+            {
+                "lastname": "Millsap",
+                "firstname": "Paul",
+                "playerid": 200794,
+                "jersey": "4",
+                "position": "F"
+            },
+            {
+                "lastname": "Horford",
+                "firstname": "Al",
+                "playerid": 201143,
+                "jersey": "15",
+                "position": "F-C"
+            },
+            {
+                "lastname": "Splitter",
+                "firstname": "Tiago",
+                "playerid": 201168,
+                "jersey": "11",
+                "position": "F-C"
+            },
+            {
+                "lastname": "Teague",
+                "firstname": "Jeff",
+                "playerid": 201952,
+                "jersey": "0",
+                "position": "G"
+            },
+            {
+                "lastname": "Mack",
+                "firstname": "Shelvin",
+                "playerid": 202714,
+                "jersey": "8",
+                "position": "G"
+            },
+            {
+                "lastname": "Scott",
+                "firstname": "Mike",
+                "playerid": 203118,
+                "jersey": "32",
+                "position": "F"
+            },
+            {
+                "lastname": "Bazemore",
+                "firstname": "Kent",
+                "playerid": 203145,
+                "jersey": "24",
+                "position": "G"
+            },
+            {
+                "lastname": "Holiday",
+                "firstname": "Justin",
+                "playerid": 203200,
+                "jersey": "7",
+                "position": "G"
+            },
+            {
+                "lastname": "Schroder",
+                "firstname": "Dennis",
+                "playerid": 203471,
+                "jersey": "17",
+                "position": "G"
+            },
+            {
+                "lastname": "Muscala",
+                "firstname": "Mike",
+                "playerid": 203488,
+                "jersey": "31",
+                "position": "F-C"
+            },
+            {
+                "lastname": "Patterson",
+                "firstname": "Lamar",
+                "playerid": 203934,
+                "jersey": "13",
+                "position": "G-F"
+            }
+        ]
+    },
+    "visitor": {
+        "name": "Detroit Pistons",
+        "teamid": 1610612765,
+        "abbreviation": "DET",
+        "players": [
+            {
+                "lastname": "Blake",
+                "firstname": "Steve",
+                "playerid": 2581,
+                "jersey": "22",
+                "position": "G"
+            },
+            {
+                "lastname": "Ilyasova",
+                "firstname": "Ersan",
+                "playerid": 101141,
+                "jersey": "23",
+                "position": "F"
+            },
+            {
+                "lastname": "Anthony",
+                "firstname": "Joel",
+                "playerid": 201202,
+                "jersey": "50",
+                "position": "C"
+            },
+            {
+                "lastname": "Meeks",
+                "firstname": "Jodie",
+                "playerid": 201975,
+                "jersey": "20",
+                "position": "G"
+            },
+            {
+                "lastname": "Morris",
+                "firstname": "Marcus",
+                "playerid": 202694,
+                "jersey": "13",
+                "position": "F"
+            },
+            {
+                "lastname": "Jackson",
+                "firstname": "Reggie",
+                "playerid": 202704,
+                "jersey": "1",
+                "position": "G"
+            },
+            {
+                "lastname": "Drummond",
+                "firstname": "Andre",
+                "playerid": 203083,
+                "jersey": "0",
+                "position": "C"
+            },
+            {
+                "lastname": "Baynes",
+                "firstname": "Aron",
+                "playerid": 203382,
+                "jersey": "12",
+                "position": "F-C"
+            },
+            {
+                "lastname": "Caldwell-Pope",
+                "firstname": "Kentavious",
+                "playerid": 203484,
+                "jersey": "5",
+                "position": "G"
+            },
+            {
+                "lastname": "Bullock",
+                "firstname": "Reggie",
+                "playerid": 203493,
+                "jersey": "25",
+                "position": "F"
+            },
+            {
+                "lastname": "Dinwiddie",
+                "firstname": "Spencer",
+                "playerid": 203915,
+                "jersey": "8",
+                "position": "G"
+            },
+            {
+                "lastname": "Johnson",
+                "firstname": "Stanley",
+                "playerid": 1626169,
+                "jersey": "3",
+                "position": "F"
+            },
+            {
+                "lastname": "Hilliard",
+                "firstname": "Darrun",
+                "playerid": 1626199,
+                "jersey": "6",
+                "position": "F"
+            }
+        ]
+    },
+    "period": 4,
+    "start_time": 324,
+    "end_time": 316,
+    "visitor_score": 92,
+    "home_score": 78,
+    "offensive_team": "home",
+    "terminal_player": "203118",
+    "defensive_player": "",
+    "event_result": "3pt shot&miss&",
+    "possession_start_index": 0,
+    "possession_end_index": 135
+}

@@ -1,0 +1,404 @@
+
+<html>
+<body>
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <div class="Input">
+        <input type="text" id="Round" name="Round" placeholder="回合">
+
+        <input type="text" id="Index" name="Index" placeholder="帧数">
+
+        <button onclick="movement();">Submit</button>
+
+        <button onclick="NextFrame();">NextFrame</button>
+    </div>
+
+    <div class="Basketball_Background">
+
+        <img src="{{ url_for('static', filename='BasketballBackground.png')}}" />
+
+    </div>
+
+
+
+
+    <!--<div class="Home" id="Home_Team">
+
+    </div>-->
+    <div class="Home" id="Home_Team">
+        <span id="Team A.0">•</span>
+        <span id="Team A.1">•</span>
+        <span id="Team A.2">•</span>
+        <span id="Team A.3">•</span>
+        <span id="Team A.4">•</span>
+    </div>
+
+    <div class="Visitor" id="Visitor_Team">
+        <span id="Team B.0">•</span>
+        <span id="Team B.1">•</span>
+        <span id="Team B.2">•</span>
+        <span id="Team B.3">•</span>
+        <span id="Team B.4">•</span>
+
+    </div>
+
+
+
+
+</body>
+</html>
+<script>
+ function movement() 
+    {
+        $.ajax({
+            url: "Analysis-Match", /*数据提交到submit处*/
+            type: "POST", /*采用POST方法提交*/
+            data: { "event_id": $("#Round").val(),"start_index":$("#Index").val()}, /*提交的数据（json格式），从输入框中获取*/
+            /*result为后端函数返回的json*/
+            success: function (result) {
+                
+                if (result.message == "success!") {
+                    //Get the Home_Team Id
+                    var Home_Id = result.metadata.home.teamid;
+                    
+              
+                    var Movement_Data = (result.movement);
+                    /*for (var i = 0; i < Movement_Data.length; i++)*/
+                    for (var i = 0; i < 1; i++) {
+                        //Get the Current Possetion
+                        var value = Movement_Data[i];
+
+                        var HomePlayer_Cnt = 0;
+                        var VisitorPlayer_Cnt = 0;
+                        
+
+                        //Traverse the All the Player Position On each possestion
+                        for (var j = 0; j < value.player_position.length; j++) {
+                            var player_data = value.player_position[j];    
+
+                            //player Belongs to Home_Team
+                            if (player_data[0] == Home_Id) {
+                                var Position_X = (player_data[2] * 10 + 100).toFixed(0);
+                                var Position_Y = (player_data[3] * 10 + 125).toFixed(0);
+                                
+
+                                switch (HomePlayer_Cnt) {
+                                    case 0:
+                                        var elem = document.getElementById("Team A.0");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    case 1:
+                                        var elem = document.getElementById("Team A.1");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    case 2:
+                                        var elem = document.getElementById("Team A.2");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    case 3:
+                                        var elem = document.getElementById("Team A.3");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    case 4:
+                                        var elem = document.getElementById("Team A.4");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    default:
+                                        alert("error")
+                                }    
+                                //alert(Home_Team_html)
+                                HomePlayer_Cnt++;
+                                
+                            }
+                            //player Belongs to Visitor_Team
+                            else {
+
+                                var Position_X = player_data[2] * 10 + 100;
+                                var Position_Y = player_data[3] * 10 + 125;
+                                //alert("Visitor_player")
+                                switch (VisitorPlayer_Cnt) {
+                                    case 0:
+                                        var elem = document.getElementById("Team B.0");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    case 1:
+                                        var elem = document.getElementById("Team B.1");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    case 2:
+                                        var elem = document.getElementById("Team B.2");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    case 3:
+                                        var elem = document.getElementById("Team B.3");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    case 4:
+                                        var elem = document.getElementById("Team B.4");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    default:
+                                        alert("error")
+                                }    
+                                 
+                                
+                                //alert(Visitor_Team_html)
+                                VisitorPlayer_Cnt++;
+                            }
+
+
+                        }
+                        
+
+                      
+
+                        
+
+                    }
+                    
+                    
+                }
+                else {
+                alert(result.message)
+                }
+            }
+        });
+    }   
+    
+    function NextFrame(){
+        $.ajax({
+            url: "Next_Frame", /*数据提交到submit处*/
+            type: "POST", /*采用POST方法提交*/
+            data: { "event_id": $("#Round").val(), "start_index": ($("#Index").val()) }, /*提交的数据（json格式），从输入框中获取*/
+            /*result为后端函数返回的json*/
+            success: function (result) {
+                
+
+                if (result.message == "success!") {
+                    //Get the Home_Team Id
+                    var Home_Id = result.metadata.home.teamid;
+
+
+                    var Movement_Data = (result.movement);
+                    /*for (var i = 0; i < Movement_Data.length; i++)*/
+                    for (var i = 0; i < 1; i++) {
+                        //Get the Current Possetion
+                        var value = Movement_Data[i];
+
+                        var HomePlayer_Cnt = 0;
+                        var VisitorPlayer_Cnt = 0;
+
+
+                        //Traverse the All the Player Position On each possestion
+                        for (var j = 0; j < value.player_position.length; j++) {
+                            var player_data = value.player_position[j];
+
+                            //player Belongs to Home_Team
+                            if (player_data[0] == Home_Id) {
+                                var Position_X = (player_data[2] * 10 + 100).toFixed(0);
+                                var Position_Y = (player_data[3] * 10 + 125).toFixed(0);
+
+                                
+
+                                switch (HomePlayer_Cnt) {
+                                    case 0:
+                                        var elem = document.getElementById("Team A.0");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    case 1:
+                                        var elem = document.getElementById("Team A.1");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    case 2:
+                                        var elem = document.getElementById("Team A.2");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    case 3:
+                                        var elem = document.getElementById("Team A.3");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    case 4:
+                                        var elem = document.getElementById("Team A.4");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    default:
+                                        alert("error")
+                                }
+                                //alert(Home_Team_html)
+                                HomePlayer_Cnt++;
+
+                            }
+                            //player Belongs to Visitor_Team
+                            else {
+
+                                var Position_X = player_data[2] * 10 + 100;
+                                var Position_Y = player_data[3] * 10 + 125;
+                                //alert("Visitor_player")
+                                switch (VisitorPlayer_Cnt) {
+                                    case 0:
+                                        var elem = document.getElementById("Team B.0");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    case 1:
+                                        var elem = document.getElementById("Team B.1");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    case 2:
+                                        var elem = document.getElementById("Team B.2");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    case 3:
+                                        var elem = document.getElementById("Team B.3");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    case 4:
+                                        var elem = document.getElementById("Team B.4");//获取控件
+                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                        elem.style.left = Position_X;//设置left数值
+
+                                        elem.style.top = Position_Y;//设置top数值
+                                        break;
+                                    default:
+                                        alert("error")
+                                }
+
+
+                                //alert(Visitor_Team_html)
+                                VisitorPlayer_Cnt++;
+                            }
+
+
+                        }
+
+
+
+
+
+
+                    }
+
+
+                }
+                else {
+                    alert(result.message)
+                }
+            }
+        });
+    }
+
+
+
+</script>
+
+
+
+
+
+
+<style>
+    .Basketball_Background {
+        
+        width: 940px;
+        height: 500px;
+        position: absolute;
+        left: 100px;
+        top: 125px;
+        text-align: center;
+        vertical-align: middle;
+    }
+    .Input {
+        position: absolute;
+        left: 300px;
+        top: 100px;
+    }
+    .Home {
+        margin: 0 10px;
+        color: red;
+        font-size: 116px;
+    }
+    .Visitor {
+        margin: 0 10px;
+        color: yellow;
+        font-size: 116px;
+    }
+    
+
+</style>
+
