@@ -10,7 +10,7 @@
 
         <button onclick="movement();">Submit</button>
 
-        <button onclick="NextFrame();">NextFrame</button>
+        
     </div>
 
     <div class="Basketball_Background">
@@ -42,6 +42,9 @@
 
     </div>
 
+    <div class="Basketball" >
+        <span id="Ball">•</span>
+    </div>
 
 
 
@@ -57,311 +60,184 @@
             /*result为后端函数返回的json*/
             success: function (result) {
                 
-                if (result.message == "success!") {
+                if (result.message == "success!")
+                {
                     //Get the Home_Team Id
                     var Home_Id = result.metadata.home.teamid;
-                    
-              
+                    //Get the Moverment_Data
                     var Movement_Data = (result.movement);
-                    /*for (var i = 0; i < Movement_Data.length; i++)*/
-                    for (var i = 0; i < 1; i++) {
-                        //Get the Current Possetion
-                        var value = Movement_Data[i];
+                    var timer = null;
+                    //Main Index for the Every clip
+                    var cnt = 0;
+                    
 
-                        var HomePlayer_Cnt = 0;
-                        var VisitorPlayer_Cnt = 0;
+                    
+                    
+                    clearInterval(timer);
+                    //start Timer
+                    timer = setInterval(function () {
+                        var value = Movement_Data[cnt];
                         
+                        /*alert(cnt)*/
+                        if (cnt == value.player_position.length) {
+                            clearInterval(timer);
+                            return;
+                        }
+                        else
+                        {
+                            //Part1.Get the Value of the Ball,Change the Ball Position 
+                            var ball_data = value.ball_position;
+                            var Position_X = (ball_data[0] * 10 + 100).toFixed(0);
+                            var Position_Y = (ball_data[1] * 10 + 125).toFixed(0);
+                            //Change the Ball Position
+                            var elem = document.getElementById("Ball");//获取控件
+                            elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+                            elem.style.left = Position_X;//设置left数值
+                            elem.style.top = Position_Y;//设置top数值
 
-                        //Traverse the All the Player Position On each possestion
-                        for (var j = 0; j < value.player_position.length; j++) {
-                            var player_data = value.player_position[j];    
 
-                            //player Belongs to Home_Team
-                            if (player_data[0] == Home_Id) {
-                                var Position_X = (player_data[2] * 10 + 100).toFixed(0);
-                                var Position_Y = (player_data[3] * 10 + 125).toFixed(0);
-                                
+                            //Part2.Get the Value of the Player,Change the Player Position
+                            //the Counter for the HomePlayer and VisitorPlayer
+                            var HomePlayer_Cnt = 0;
+                            var VisitorPlayer_Cnt = 0;
+                            //Traverse the All the Player Position On each possestion
+                            for (var j = 0; j < value.player_position.length; j++)
+                            {
+                                var player_data = value.player_position[j];
 
-                                switch (HomePlayer_Cnt) {
-                                    case 0:
-                                        var elem = document.getElementById("Team A.0");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+                                //player Belongs to Home_Team
+                                if (player_data[0] == Home_Id) {
+                                    var Position_X = (player_data[2] * 10 + 100).toFixed(0);
+                                    var Position_Y = (player_data[3] * 10 + 125).toFixed(0);
 
-                                        elem.style.left = Position_X;//设置left数值
 
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    case 1:
-                                        var elem = document.getElementById("Team A.1");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+                                    switch (HomePlayer_Cnt) {
+                                        case 0:
+                                            var elem = document.getElementById("Team A.0");//获取控件
+                                            elem.style.position = "absolute";//设置绝对定位（或者相对定位）
 
-                                        elem.style.left = Position_X;//设置left数值
+                                            elem.style.left = Position_X;//设置left数值
 
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    case 2:
-                                        var elem = document.getElementById("Team A.2");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+                                            elem.style.top = Position_Y;//设置top数值
+                                            break;
+                                        case 1:
+                                            var elem = document.getElementById("Team A.1");//获取控件
+                                            elem.style.position = "absolute";//设置绝对定位（或者相对定位）
 
-                                        elem.style.left = Position_X;//设置left数值
+                                            elem.style.left = Position_X;//设置left数值
 
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    case 3:
-                                        var elem = document.getElementById("Team A.3");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+                                            elem.style.top = Position_Y;//设置top数值
+                                            break;
+                                        case 2:
+                                            var elem = document.getElementById("Team A.2");//获取控件
+                                            elem.style.position = "absolute";//设置绝对定位（或者相对定位）
 
-                                        elem.style.left = Position_X;//设置left数值
+                                            elem.style.left = Position_X;//设置left数值
 
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    case 4:
-                                        var elem = document.getElementById("Team A.4");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+                                            elem.style.top = Position_Y;//设置top数值
+                                            break;
+                                        case 3:
+                                            var elem = document.getElementById("Team A.3");//获取控件
+                                            elem.style.position = "absolute";//设置绝对定位（或者相对定位）
 
-                                        elem.style.left = Position_X;//设置left数值
+                                            elem.style.left = Position_X;//设置left数值
 
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    default:
-                                        alert("error")
-                                }    
-                                //alert(Home_Team_html)
-                                HomePlayer_Cnt++;
-                                
+                                            elem.style.top = Position_Y;//设置top数值
+                                            break;
+                                        case 4:
+                                            var elem = document.getElementById("Team A.4");//获取控件
+                                            elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                            elem.style.left = Position_X;//设置left数值
+
+                                            elem.style.top = Position_Y;//设置top数值
+                                            break;
+                                        default:
+                                            alert("error")
+                                    }
+                                    //alert(Home_Team_html)
+                                    HomePlayer_Cnt++;
+
+                                }
+                                //player Belongs to Visitor_Team
+                                else {
+
+                                    var Position_X = player_data[2] * 10 + 100;
+                                    var Position_Y = player_data[3] * 10 + 125;
+                                    //alert("Visitor_player")
+                                    switch (VisitorPlayer_Cnt) {
+                                        case 0:
+                                            var elem = document.getElementById("Team B.0");//获取控件
+                                            elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                            elem.style.left = Position_X;//设置left数值
+
+                                            elem.style.top = Position_Y;//设置top数值
+                                            break;
+                                        case 1:
+                                            var elem = document.getElementById("Team B.1");//获取控件
+                                            elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                            elem.style.left = Position_X;//设置left数值
+
+                                            elem.style.top = Position_Y;//设置top数值
+                                            break;
+                                        case 2:
+                                            var elem = document.getElementById("Team B.2");//获取控件
+                                            elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                            elem.style.left = Position_X;//设置left数值
+
+                                            elem.style.top = Position_Y;//设置top数值
+                                            break;
+                                        case 3:
+                                            var elem = document.getElementById("Team B.3");//获取控件
+                                            elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                            elem.style.left = Position_X;//设置left数值
+
+                                            elem.style.top = Position_Y;//设置top数值
+                                            break;
+                                        case 4:
+                                            var elem = document.getElementById("Team B.4");//获取控件
+                                            elem.style.position = "absolute";//设置绝对定位（或者相对定位）
+
+                                            elem.style.left = Position_X;//设置left数值
+
+                                            elem.style.top = Position_Y;//设置top数值
+                                            break;
+                                        default:
+                                            alert("error")
+                                    }
+
+
+                                    //alert(Visitor_Team_html)
+                                    VisitorPlayer_Cnt++;
+                                }
+
+
                             }
-                            //player Belongs to Visitor_Team
-                            else {
-
-                                var Position_X = player_data[2] * 10 + 100;
-                                var Position_Y = player_data[3] * 10 + 125;
-                                //alert("Visitor_player")
-                                switch (VisitorPlayer_Cnt) {
-                                    case 0:
-                                        var elem = document.getElementById("Team B.0");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
-
-                                        elem.style.left = Position_X;//设置left数值
-
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    case 1:
-                                        var elem = document.getElementById("Team B.1");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
-
-                                        elem.style.left = Position_X;//设置left数值
-
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    case 2:
-                                        var elem = document.getElementById("Team B.2");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
-
-                                        elem.style.left = Position_X;//设置left数值
-
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    case 3:
-                                        var elem = document.getElementById("Team B.3");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
-
-                                        elem.style.left = Position_X;//设置left数值
-
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    case 4:
-                                        var elem = document.getElementById("Team B.4");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
-
-                                        elem.style.left = Position_X;//设置left数值
-
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    default:
-                                        alert("error")
-                                }    
-                                 
-                                
-                                //alert(Visitor_Team_html)
-                                VisitorPlayer_Cnt++;
-                            }
-
+                            cnt++;
+                           
 
                         }
-                        
+                    }, 30);
 
-                      
 
-                        
-
-                    }
-                    
-                    
                 }
+
+                        
+                    
+                   
+               
                 else {
-                alert(result.message)
+                alert("failed!!!!")
                 }
             }
         });
     }   
     
-    function NextFrame(){
-        $.ajax({
-            url: "Next_Frame", /*数据提交到submit处*/
-            type: "POST", /*采用POST方法提交*/
-            data: { "event_id": $("#Round").val(), "start_index": ($("#Index").val()) }, /*提交的数据（json格式），从输入框中获取*/
-            /*result为后端函数返回的json*/
-            success: function (result) {
-                
-
-                if (result.message == "success!") {
-                    //Get the Home_Team Id
-                    var Home_Id = result.metadata.home.teamid;
-
-
-                    var Movement_Data = (result.movement);
-                    /*for (var i = 0; i < Movement_Data.length; i++)*/
-                    for (var i = 0; i < 1; i++) {
-                        //Get the Current Possetion
-                        var value = Movement_Data[i];
-
-                        var HomePlayer_Cnt = 0;
-                        var VisitorPlayer_Cnt = 0;
-
-
-                        //Traverse the All the Player Position On each possestion
-                        for (var j = 0; j < value.player_position.length; j++) {
-                            var player_data = value.player_position[j];
-
-                            //player Belongs to Home_Team
-                            if (player_data[0] == Home_Id) {
-                                var Position_X = (player_data[2] * 10 + 100).toFixed(0);
-                                var Position_Y = (player_data[3] * 10 + 125).toFixed(0);
-
-                                
-
-                                switch (HomePlayer_Cnt) {
-                                    case 0:
-                                        var elem = document.getElementById("Team A.0");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
-
-                                        elem.style.left = Position_X;//设置left数值
-
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    case 1:
-                                        var elem = document.getElementById("Team A.1");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
-
-                                        elem.style.left = Position_X;//设置left数值
-
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    case 2:
-                                        var elem = document.getElementById("Team A.2");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
-
-                                        elem.style.left = Position_X;//设置left数值
-
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    case 3:
-                                        var elem = document.getElementById("Team A.3");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
-
-                                        elem.style.left = Position_X;//设置left数值
-
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    case 4:
-                                        var elem = document.getElementById("Team A.4");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
-
-                                        elem.style.left = Position_X;//设置left数值
-
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    default:
-                                        alert("error")
-                                }
-                                //alert(Home_Team_html)
-                                HomePlayer_Cnt++;
-
-                            }
-                            //player Belongs to Visitor_Team
-                            else {
-
-                                var Position_X = player_data[2] * 10 + 100;
-                                var Position_Y = player_data[3] * 10 + 125;
-                                //alert("Visitor_player")
-                                switch (VisitorPlayer_Cnt) {
-                                    case 0:
-                                        var elem = document.getElementById("Team B.0");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
-
-                                        elem.style.left = Position_X;//设置left数值
-
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    case 1:
-                                        var elem = document.getElementById("Team B.1");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
-
-                                        elem.style.left = Position_X;//设置left数值
-
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    case 2:
-                                        var elem = document.getElementById("Team B.2");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
-
-                                        elem.style.left = Position_X;//设置left数值
-
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    case 3:
-                                        var elem = document.getElementById("Team B.3");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
-
-                                        elem.style.left = Position_X;//设置left数值
-
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    case 4:
-                                        var elem = document.getElementById("Team B.4");//获取控件
-                                        elem.style.position = "absolute";//设置绝对定位（或者相对定位）
-
-                                        elem.style.left = Position_X;//设置left数值
-
-                                        elem.style.top = Position_Y;//设置top数值
-                                        break;
-                                    default:
-                                        alert("error")
-                                }
-
-
-                                //alert(Visitor_Team_html)
-                                VisitorPlayer_Cnt++;
-                            }
-
-
-                        }
-
-
-
-
-
-
-                    }
-
-
-                }
-                else {
-                    alert(result.message)
-                }
-            }
-        });
-    }
+  
 
 
 
@@ -396,6 +272,11 @@
     .Visitor {
         margin: 0 10px;
         color: yellow;
+        font-size: 116px;
+    }
+    .Basketball {
+        margin: 0 10px;
+        color: blue;
         font-size: 116px;
     }
     
