@@ -1,0 +1,30 @@
+.background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url("./SmatHomeLogin.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -o-background-size: cover;                
+    background-size: cover;
+}
+
+.register {
+    position: fixed;
+    top: 36%;
+    width: 300px;
+    left: 40%
+}
+
+.register-form-button {
+    position: fixed;
+    width: 300px
+}
+.register-card{
+    background: #f2f3f7;
+    width: 360px;
+    height: 380px;
+    position: fixed;
+    top:34%;
+    left: 38%;
+    border-radius: 20px;
+}

@@ -1,0 +1,41 @@
+.Canvas{
+            
+    position: absolute;
+    left: 100px;
+    top: 155px;
+
+}
+
+.Basketball_Background {
+    
+ 
+    position: absolute;
+    left: 100px;
+    top: 125px;
+    text-align: center;
+    
+    vertical-align: middle;
+}
+.Input {
+    position: absolute;
+    left: 300px;
+    top: 100px;
+}
+.Home {
+    margin: 0 10px;
+    color: red;
+    font-size: 0px;
+    
+}
+.Visitor {
+    margin: 0 10px;
+    color: yellow;
+    font-size: 0px;
+    
+}
+.Basketball {
+    margin: 0 10px;
+    color: blue;
+    font-size: 0px;
+    
+}
