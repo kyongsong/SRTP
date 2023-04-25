@@ -98,7 +98,7 @@ def add_routes(app):
                         # if flag == 10:
                         #     break
 
-                    print("round ", index, "got ", len(candidate), " matches")
+                    
 
                     # now candidate is filled with candidates' start point and end point.
                     for idx_candidate in range(len(candidate)):
@@ -131,7 +131,7 @@ def add_routes(app):
                 # dict_cur[0][0] -> cnt
                 data_rst.append([dis_list[i][1], dict_cur[0][0], dict_cur[1][0]])
                 i = i + 1
-
+            print(data_rst)
             return json.dumps({'status': 'success', 'data': data_rst})
         except Exception as _:
             print(_)

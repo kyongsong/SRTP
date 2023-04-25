@@ -10,8 +10,9 @@ import BasketballBg from './BasketballBackground.png'
 import { SearchOutlined ,RedoOutlined} from '@ant-design/icons';
 
 import { Button, Checkbox, Form, Input, message,Layout } from 'antd';
-import Sidebar from '../../component/Sidebar/Sidebar.js'
+
 import Header from '../../component/Header/Header.js'
+import PlayList from '../../component/RoundPlayLIst/RoundPlayList.js'
 
 
 var store = window.localStorage
@@ -109,12 +110,13 @@ function BasketballPage() {
            
             request.post('/Match', data).then(
                 res =>{
-                    console.log(res.data)
-                console.log(res.data[0])
-                if(res.data[0]=="undefined"){
+                    console.log(res)
+                    console.log(res.data.data.length)
+                
+                if(res.data.data.length===0){
                    alert("匹配失败")
                 }else{
-                    alert("回合:"+res.data[0]+"Start:"+res.data[1]+"End:"+res.data[2])
+                    alert("回合:"+res.data.data[0][0]+"Start:"+res.data.data[0][1]+"End:"+res.data.data[0][2])
                 }
                 
                 
@@ -434,6 +436,9 @@ function BasketballPage() {
                 <Button icon={<SearchOutlined />} onClick={Movement}>Submit</Button>
                 <Button icon={<RedoOutlined />} onClick={Reset} >Reset</Button>
             </div>
+            
+                {/* <PlayList/> */}
+            
             <div>
             <img src={BasketballBg} className='Basketball_Background'></img>
             <div  className="Canvas">
