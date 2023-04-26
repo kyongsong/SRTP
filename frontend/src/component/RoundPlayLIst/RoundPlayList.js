@@ -52,7 +52,7 @@ import {StarOutlined,LikeOutlined,MessageOutlined,PlayCircleOutlined  ,ClockCirc
 import BasketballBg from '../../page/BasketballPage/BasketballBackground.png'
 import React from 'react';
 const data = Array.from({
-  length: 5,
+  length: 23,
 }).map((_, i) => ({
   href: 'https://ant.design',
   title: `Player ${i}`,

@@ -457,10 +457,10 @@ function BasketballPage() {
             
             
             
-            <div className='siderStyle'>
+            { <div className='siderStyle'>
                 
                 <PlayList width="400"/>
-            </div>
+            </div> }
             
             
             <div  className="Canvas">

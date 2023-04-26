@@ -6,50 +6,50 @@ from fastdtw import fastdtw
 from flask import Flask, request, render_template
 
 import dtw
+
 # global Variable for the event_id and index
 event_id_value = 0
 index_value = 0
- # simulate the scatching plan of users
+
+
+# simulate the scatching plan of users
 
 
 def add_routes(app):
-    @app.route('/' )
+    @app.route('/')
     @app.route('/<path:path>')
-
     # do the track matching algorithm
     @app.route("/Match", methods=['POST'])
-    def matching()->str:
-    # """
-    # :param scatch: the track of the path
-    # :return: a list that contains the information in format
-    #         {round, start frame number, end frame number, team_id, player_id}
-    # """
+    def matching() -> str:
+        # """
+        # :param scatch: the track of the path
+        # :return: a list that contains the information in format
+        #         {round, start frame number, end frame number, team_id, player_id}
+        # """
         try:
-            
-            scatch_track =flask.request.json.get("MoveTrack")
-            print(scatch_track)
-            scatch1=json.loads(scatch_track)
-            scatch = []
-            index=0
-            for i in scatch1:
-                index=0
-                x=0
-                y=0
-                for j in i.values():
-                    if(index==0):
-                        x=j
-                        index=index+1
-                    elif(index==1):
-                        y=j
-                        index=index+1
-                        scatch.append([x,y])
 
-                
-            
-            index_list = os.listdir('0021500001') # info of one game
+            scatch_track = flask.request.json.get("MoveTrack")
+            print(scatch_track)
+            scatch1 = json.loads(scatch_track)
+            scatch = []
+            index = 0
+            for i in scatch1:
+                index = 0
+                x = 0
+                y = 0
+                for j in i.values():
+                    if index == 0:
+                        x = j
+                        index = index + 1
+                    elif index == 1:
+                        y = j
+                        index = index + 1
+                        scatch.append([x, y])
+
+            index_list = os.listdir('0021500001')  # info of one game
             data_rst = []
             threshold = 3
-            dis_list = [] # final answer trace list
+            dis_list = []  # final answer trace list
             # index: round of a game
             for index in index_list:
                 # for each round
@@ -88,7 +88,7 @@ def add_routes(app):
                     flag = 0
                     for starters in candidate_start:
                         for enders in candidate_end:
-                            if starters[1][0] == enders[1][0] and starters[1][1] == enders[1][1]: # 0->team_id; 1->player_id
+                            if starters[1][0] == enders[1][0] and starters[1][1] == enders[1][1]:  # 0->team_id; 1->player_id
                                 candidate.append([starters, enders])
                                 print("  player pos1: ", starters[1][2], starters[1][3])
                                 print("  player pos2: ", enders[1][2], enders[1][3])
@@ -97,8 +97,6 @@ def add_routes(app):
                         #         break
                         # if flag == 10:
                         #     break
-
-                    
 
                     # now candidate is filled with candidates' start point and end point.
                     for idx_candidate in range(len(candidate)):
@@ -124,7 +122,7 @@ def add_routes(app):
             # now the idx_min labels the best matching.
             print(len(dis_list))
             i = 0
-            while i < 1 and i < len(dis_list):
+            while i < 5 and i < len(dis_list):
                 dict_cur = dis_list[i][2]
                 # dict_cur -> an element of candidate
                 # dict_cur[0] -> starter, an element of candidate_start -> [cnt, player]
@@ -158,10 +156,9 @@ def add_routes(app):
             print(_)
             return json.dumps({'status': 'failed'})
 
-
     # animation of trajectories
     @app.route("/Analysis-Match", methods=['POST'])
-    def movement()->str:
+    def movement() -> str:
         try:
             # 这里发来的请求需要加个参数 event_id = xxx，选择播放第几个回合的轨迹
             global event_id_value
@@ -174,8 +171,6 @@ def add_routes(app):
             # print(event_id)
             # print(index)
             # print(Endindex)
-            
-       
 
             event_id_value = int(event_id)
             index_value = int(index)
