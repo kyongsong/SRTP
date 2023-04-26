@@ -132,7 +132,7 @@ const Sidebar = () => {
         theme="dark"
           style={{
             width: 200,
-            height:900,
+            height:970,
             
             backgroundColor: '#002329',
           }}

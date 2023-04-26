@@ -1,8 +1,8 @@
 .Canvas{
             
     position: absolute;
-    left: 200px;
-    top: 155px;
+    left: 240px;
+    top: 180px;
 
 }
 
@@ -26,6 +26,8 @@
     margin: 0 10px;
     color: red;
     font-size: 0px;
+   
+
     
 }
 .Visitor {
@@ -46,7 +48,7 @@
     position:absolute;
     
     /* left:1320px; */
-    left:1480px;
+    left:1440px;
     top:80px;
     
     
@@ -57,4 +59,17 @@
     
 };
 
-
+.App {
+    background: -moz-linear-gradient(
+    106.37deg,
+    #e6fffb 29.63%,
+    #36cfc9 51.55%,
+    
+    
+    #13c2c2 90.85%,
+    
+    );
+    height:100vh;
+    display: flex;
+    font-family: 'Inter',sans-serif;
+}

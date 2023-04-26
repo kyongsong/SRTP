@@ -30,8 +30,8 @@ function BasketballPage() {
     useEffect(() => {
         
         var canvas = document.getElementById('theCanvas');
-        canvas.setAttribute("width","1200");
-        canvas.setAttribute("height","680");
+        canvas.setAttribute("width","1194");
+        canvas.setAttribute("height","672");
         
         var context = canvas.getContext('2d');
         var imageObj = new Image();
@@ -50,11 +50,16 @@ function BasketballPage() {
     
     const windowToCanvas = (canvas, x, y) => {
         let rect = canvas.getBoundingClientRect()
+        
+        
         return {
+                
                 x: x - rect.left * (canvas.width/rect.width),
                 y: y - rect.top * (canvas.height/rect.height)
         }
     }
+  
+    
     useEffect(() => {
         let theCanvas = document.querySelector('#theCanvas')
         
@@ -72,11 +77,16 @@ function BasketballPage() {
         //mouse down
         theCanvas.onmousedown = function(e) {
             isAllowDrawLine = true
+            
             let ele = windowToCanvas(theCanvas, e.clientX, e.clientY)
+            console.log(ele.x,ele.y)
+            
             let { x, y } = ele
-            let x1=(ele.x-10.0)/10
+            let x1=(ele.x-5)/12.6
+            
             if(x1<0) x1=0;
-            let y1=(ele.y-9.0)/10
+            let y1=(ele.y-5)/13.26
+            console.log(y1)
             if(y1<0) y1=0;
             
             MoveTrack.push({x1,y1})
@@ -88,10 +98,13 @@ function BasketballPage() {
                 if (isAllowDrawLine) {
                     let ele = windowToCanvas(theCanvas, e.clientX, e.clientY)
                     let { x, y } = ele
-                    let x1=(ele.x-10.0)/10
+                    let x1=(ele.x-5)/12.6
+                    
                     if(x1<0) x1=0;
-                    let y1=(ele.y-9.0)/10
+                    let y1=(ele.y-5)/13.26
+                    console.log(y1)
                     if(y1<0) y1=0;
+                    console.log("Move "+x1+" "+y1)
                     
                     MoveTrack.push({x1,y1})
                     context.lineTo(x, y)
@@ -134,66 +147,7 @@ function BasketballPage() {
         
              
         }, []);
-    const Reset=()=>{
 
-            var ball = document.getElementById("Ball");
-       
-            
-           ball.style.fontSize=0;
-           var elem1 = document.getElementById("Team A.0");//获取控件
-           
-           elem1.style.fontSize=0;
-        
-           var elem2 = document.getElementById("Team A.1");//获取控件
-          
-           elem2.style.fontSize=0;
-     
-           var elem3 = document.getElementById("Team A.2");//获取控件
-          
-           elem3.style.fontSize=0;
-          
-       
-           var elem4 = document.getElementById("Team A.3");//获取控件
-           
-           elem4.style.fontSize=0;
-           
-      
-           var elem5 = document.getElementById("Team A.4");//获取控件
-          
-           
-           elem5.style.fontSize=0;
-         
-
-
- 
-           var elem6 = document.getElementById("Team B.0");//获取控件
-           
-           elem6.style.fontSize=0;
-   
-      
-           var elem10 = document.getElementById("Team B.1");//获取控件
-           
-           elem10.style.fontSize=0;
-
-
-           var elem7 = document.getElementById("Team B.2");//获取控件
-           
-           elem7.style.fontSize=0;
-   
-
-           var elem8 = document.getElementById("Team B.3");//获取控件
-          
-           elem8.style.fontSize=0;
-
-           var elem9 = document.getElementById("Team B.4");//获取控件
-   
-           elem9.style.fontSize=0;
-          
-            var canvas = document.getElementById('theCanvas');
-            canvas.width=canvas.width;
-           console.log('reset')
-
-    }
     const [event_id,setEvent_Id]=useState('');
     const [start_index,setStart_Index]=useState('');
     const [end_index,setEnd_Index]=useState('');
@@ -238,10 +192,13 @@ function BasketballPage() {
                     {
                         //Part1.Get the Value of the Ball,Change the Ball Position 
                         var ball_data = value.ball_position;
-                        var X_Rate=10;
-                        var Y_Rate=10;
-                        var Position_X = (ball_data[0] * X_Rate + 100).toFixed(0);
-                        var Position_Y = (ball_data[1] * Y_Rate + 105).toFixed(0);
+                        var X_Rate=12.7;
+                        var Y_Rate=13.44;
+                        var Px_OffsetX=200;
+                        var Px_OffsetY=100;
+
+                        var Position_X = (ball_data[0] * X_Rate + Px_OffsetX).toFixed(0);
+                        var Position_Y = (ball_data[1] * Y_Rate + Px_OffsetY).toFixed(0);
                         //Change the Ball Position
                         var elem = document.getElementById("Ball");//获取控件
                         elem.style.position = "absolute";//设置绝对定位（或者相对定位）
@@ -262,8 +219,8 @@ function BasketballPage() {
 
                             //player Belongs to Home_Team
                             if (player_data[0] == Home_Id) {
-                                var Position_X = (player_data[2] * X_Rate + 100).toFixed(0);
-                                var Position_Y = (player_data[3] * Y_Rate + 105).toFixed(0);
+                                var Position_X = (player_data[2] * X_Rate + Px_OffsetX).toFixed(0);
+                                var Position_Y = (player_data[3] * Y_Rate + Px_OffsetY).toFixed(0);
 
 
                                 switch (HomePlayer_Cnt) {
@@ -322,8 +279,8 @@ function BasketballPage() {
                             //player Belongs to Visitor_Team
                             else {
 
-                                var Position_X = player_data[2] * X_Rate + 100;
-                                var Position_Y = player_data[3] * Y_Rate + 105;
+                                var Position_X = player_data[2] * X_Rate + Px_OffsetX;
+                                var Position_Y = player_data[3] * Y_Rate + Px_OffsetY;
                                 //alert("Visitor_player")
                                 switch (VisitorPlayer_Cnt) {
                                     case 0:
@@ -405,12 +362,14 @@ function BasketballPage() {
     
 
     return (
-    <div >
-         
-        
-        
-         
+    <div>
         <Header1/> 
+    <div className='App'>
+         
+        
+        
+         
+        {/* <Header1/>  */}
         <Sidebar/>
         
         
@@ -448,26 +407,27 @@ function BasketballPage() {
                 <Button icon={<SearchOutlined />} onClick={Movement}>Submit</Button>
                 
             </div>
+           
           
                
             
                
-            <img src={BasketballBg} className='Basketball_Background'></img>
+             <img src={BasketballBg} className='Basketball_Background'></img>
                 
             
             
             
-            { <div className='siderStyle'>
+             <div className='siderStyle'>
                 
-                <PlayList width="400"/>
-            </div> }
+                <PlayList width="200"/>
+            </div> 
             
             
             <div  className="Canvas">
                     <canvas id="theCanvas" ></canvas>
             </div>
             
-           
+            
         
                 <div className="Home" id="Home_Team">
                 <span id="Team A.0" >•</span>
@@ -488,9 +448,10 @@ function BasketballPage() {
                 <div className="Basketball" >
                 <span id="Ball">•</span>
                 </div>  
-         
+          
           
 
+    </div>
     </div>
     )
 }

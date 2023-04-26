@@ -83,7 +83,7 @@ const RoundPlayList = () => (
       onChange: (page) => {
         console.log(page);
       },
-      pageSize: 6,
+      pageSize: 5,
     }}
     dataSource={data}
     header={

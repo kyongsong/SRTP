@@ -1,0 +1,15 @@
+
+.App {
+    background: -moz-linear-gradient(
+    106.37deg,
+    #e6fffb 29.63%,
+    #36cfc9 51.55%,
+    
+    
+    #13c2c2 90.85%,
+    
+    );
+    height:100vh;
+    display: flex;
+    font-family: 'Inter',sans-serif;
+}
