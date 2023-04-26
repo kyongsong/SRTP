@@ -24,3 +24,17 @@
 
 ## 1.2 编写时注意事项
 
+
+
+### 1.3 仍需要解决问题
+
+#### 1.前端
+
++ Basketball Image从left 100px 调整为了 200px 后续的一系列参数需要调整
++ ScoreBoard的实现
++ Sidebar的功能-工具栏 需要实现
++ RoundPlay List的前后端衔接
+
+#### 2.后端
+
++ backend算法实现
