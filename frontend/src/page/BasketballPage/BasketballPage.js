@@ -10,14 +10,16 @@ import BasketballBg from './BasketballBackground.png'
 import { SearchOutlined ,RedoOutlined} from '@ant-design/icons';
 
 import { Button, Checkbox, Form, Input, message,Layout } from 'antd';
+import Sidebar from '../../component/Sidebar/Sidebar';
 
-import Header from '../../component/Header/Header.js'
+import Header1 from '../../component/Header/Header.js'
 import PlayList from '../../component/RoundPlayLIst/RoundPlayList.js'
+import ScoreBoard from '../../component/ScoreBoard/ScoreBoard';
 
 
 var store = window.localStorage
 var username1 = store.getItem("UserName")
-
+const { Header, Footer, Sider, Content } = Layout;
 //测试 画板功能
 //衔接 前后端
 
@@ -55,7 +57,7 @@ function BasketballPage() {
     }
     useEffect(() => {
         let theCanvas = document.querySelector('#theCanvas')
-        console.log(theCanvas)
+        
         // if theCanvas is not exists or Environment does not support the Canvas
         if (!theCanvas || !theCanvas.getContext) 
         {
@@ -403,10 +405,20 @@ function BasketballPage() {
     
 
     return (
-    <div>
-   
-            <Header/>
-          
+    <div >
+         
+        
+        
+         
+        <Header1/> 
+        <Sidebar/>
+        
+        
+        
+            
+            
+            
+        
             <div className="Input" >
        
                 <Input type="text" id="Round" name="Round" placeholder="回合" 
@@ -434,16 +446,28 @@ function BasketballPage() {
                 ></Input>
 
                 <Button icon={<SearchOutlined />} onClick={Movement}>Submit</Button>
-                <Button icon={<RedoOutlined />} onClick={Reset} >Reset</Button>
+                
+            </div>
+          
+               
+            
+               
+            <img src={BasketballBg} className='Basketball_Background'></img>
+                
+            
+            
+            
+            <div className='siderStyle'>
+                
+                <PlayList width="400"/>
             </div>
             
-                {/* <PlayList/> */}
             
-            <div>
-            <img src={BasketballBg} className='Basketball_Background'></img>
             <div  className="Canvas">
                     <canvas id="theCanvas" ></canvas>
             </div>
+            
+           
         
                 <div className="Home" id="Home_Team">
                 <span id="Team A.0" >•</span>
@@ -463,9 +487,9 @@ function BasketballPage() {
 
                 <div className="Basketball" >
                 <span id="Ball">•</span>
-                </div> 
-            </div>
-            
+                </div>  
+         
+          
 
     </div>
     )

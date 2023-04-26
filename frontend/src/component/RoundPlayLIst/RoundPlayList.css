@@ -1,7 +1,10 @@
 .PlayList {
     position: absolute;
-    left: 100px;
-    top: 125px;
-    width:300px;
-    height:200px;
+    left: 300px;
+    top: 350px;
+
+}
+.PlayListHeader {
+    text-align: center;
+    color: aqua;
 }
