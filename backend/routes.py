@@ -90,8 +90,8 @@ def add_routes(app):
                         for enders in candidate_end:
                             if starters[1][0] == enders[1][0] and starters[1][1] == enders[1][1]:  # 0->team_id; 1->player_id
                                 candidate.append([starters, enders])
-                                print("  player pos1: ", starters[1][2], starters[1][3])
-                                print("  player pos2: ", enders[1][2], enders[1][3])
+                                # print("  player pos1: ", starters[1][2], starters[1][3])
+                                # print("  player pos2: ", enders[1][2], enders[1][3])
                                 flag = flag + 1
                         #     if flag == 10:
                         #         break
