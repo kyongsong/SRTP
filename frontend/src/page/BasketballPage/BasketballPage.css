@@ -1,56 +1,38 @@
 .Canvas{
             
     position: absolute;
-    left: 240px;
+    left: 380px;
     top: 180px;
 
 }
 .Background {
    background: '#000';
 }
+.container {
+    height:275;
+    width:1846;
+    display:'flex';
+}
 .Basketball_Background {
     
  
     position: absolute;
-    /* left: 100px; */
-    left:240px;
+    /* left: 240px; */
+    left:380px;
     top: 180px;
     text-align: center;
     
     vertical-align: middle;
 }
-.Input {
-    position: absolute;
-    left: 400px;
-    top: 900px;
-}
-.Home {
-    margin: 0 10px;
-    color: red;
-    font-size: 0px;
-   
 
-    
-}
-.Visitor {
-    margin: 0 10px;
-    color: yellow;
-    font-size: 0px;
-    
-}
-.Basketball {
-    margin: 0 10px;
-    color: blue;
-    font-size: 0px;
-    
-}
+
 .siderStyle  {
     
   
     position:absolute;
     
     /* left:1320px; */
-    left:1440px;
+    left:1320px;
     top:72px;
     
     

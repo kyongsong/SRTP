@@ -20,13 +20,16 @@ function ScoreBoard(){
 
   return(
   <Card
-    hoverable
+    hoverable={true}
     className='ScoreBoard'
+    bordered={false}
     style={{
       width: 750,
       height: 80,
-      left: 250,
+      left: 380,
       top: 15,
+      backgroundColor:"#006d75",
+     
     }}
   >
     <Meta

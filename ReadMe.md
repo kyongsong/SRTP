@@ -93,7 +93,9 @@
   + 可能会出现画的轨迹和检索轨迹不符合
 
 + ScoreBoard的实现
+  + 比分部分还没有实现
 + RoundPlay List的前后端衔接
+  + RoundPlay List 改成弹窗的形式
 
 #### 2.后端
 

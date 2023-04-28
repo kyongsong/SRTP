@@ -1,5 +1,5 @@
-import { RedoOutlined , SettingOutlined, ReadOutlined,DribbbleOutlined ,EditOutlined,ToolOutlined,DashOutlined ,UserOutlined   } from '@ant-design/icons';
-import { Menu, Switch } from 'antd';
+import { RedoOutlined , SettingOutlined, SearchOutlined,DribbbleOutlined ,EditOutlined,ToolOutlined,DashOutlined ,UserOutlined   } from '@ant-design/icons';
+import { Menu, Drawer} from 'antd';
 import React, { useState } from 'react';
 import Wrapper from '../../assets/wrappers/SideBar.js';
 function getItem(label, key, icon, children, type) {
@@ -12,26 +12,34 @@ function getItem(label, key, icon, children, type) {
   };
 }
 const items = [
-  getItem('用户中心', '1', <UserOutlined />),
+  getItem('User', '1', <UserOutlined />),
   
-  getItem('匹配算法', 'sub1', <DribbbleOutlined />, [
+  getItem('Algorithm', 'sub1', <DribbbleOutlined />, [
     getItem('dtw', '2'),
     getItem('encoder', '3'),
     
     
   ]),
-  getItem('工具', 'sub2', <ToolOutlined />, [
+  getItem('Tool', 'sub2', <ToolOutlined />, [
     getItem('Scratch', '4',<EditOutlined />),
     getItem('Click', '5',<DashOutlined />),
     getItem('Reset', '6',<RedoOutlined  />),
     
     
   ]),
+  getItem('Matching', '7', <SearchOutlined />),
 ];
 
 // submenu keys of first level
 const rootSubmenuKeys = ['sub1'];
 const Sidebar = () => {
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
   const [openKeys, setOpenKeys] = useState(['sub1']);
   const onOpenChange = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
@@ -117,13 +125,17 @@ const Sidebar = () => {
       console.log('reset2')
     }
     else {
-      console.log('no')
-      //window.location.href = "./OS"
+      setOpen(true);
     }
   };
-  return (
+  const theme={
     
-      <div className='nav-link'>
+      'primary-color': '#1890ff',
+  
+  }
+  return (
+
+      <div>
         <Menu
           mode="inline"
           openKeys={openKeys}
@@ -132,16 +144,22 @@ const Sidebar = () => {
         theme="dark"
           style={{
             width: 200,
-            height:970,
+            height:920,
+            fontSize:20,
             
-            backgroundColor: '#002329',
+            backgroundColor: '#00474f',
           }}
           items={items}
           
           onClick={onLink}
         />
+        <Drawer title="Matching Round" placement="right" onClose={onClose} open={open}>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Drawer>
       </div>
-   
+     
   );
 };
 
