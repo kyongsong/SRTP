@@ -203,8 +203,8 @@ function BasketballPage() {
                         //Change the Ball Position
                         var elem = document.getElementById("Ball");//获取控件
                         elem.style.position = "absolute";//设置绝对定位（或者相对定位）
-                        elem.style.left = Position_X+"px";//设置left数值
                         elem.style.top = Position_Y+"px";//设置top数值
+                        elem.style.left = Position_X+"px";//设置left数值
                        elem.style.fontSize=116+"px";
                         
 
@@ -373,14 +373,8 @@ function BasketballPage() {
         <Sidebar/>
          
         {/* <Header1/>  */}
-        
-        
-        
-        
-            
-      
-            
-        
+        <Sidebar/>
+        <ScoreBoard/>
             <div className="Input" >
        
                 <Input type="text" id="Round" name="Round" placeholder="回合" 
@@ -410,17 +404,9 @@ function BasketballPage() {
                 <Button icon={<SearchOutlined />} onClick={Movement}>Submit</Button>
                 
             </div>
-           
-          
-               
-            
-               
+ 
              <img src={BasketballBg} className='Basketball_Background'></img>
-           
-                
-             
-            
-            
+     
              <div className='siderStyle'>
                 
                 <PlayList width="200"/>
