@@ -74,6 +74,7 @@ const IconText = ({ icon, text }) => (
   </Space>
 );
 const RoundPlayList = () => (
+<Card  style={{height:960 ,backgroundColor:'#002329'}}title="Default size card" >
   <List
     
     itemLayout="vertical"
@@ -83,22 +84,15 @@ const RoundPlayList = () => (
       onChange: (page) => {
         console.log(page);
       },
-      pageSize: 5,
+      pageSize: 6,
     }}
     dataSource={data}
-    header={
-      <div className='PlayListHeader'>
-        <Card  style={{borderBottomColor:'#b5f5ec',backgroundColor:'#b5f5ec',width:"400px",fontSize:"20"}} >
-          匹配回合
-        </Card> 
-      </div>
-    }
-    
+   
     renderItem={(item) => (
      
       
       <List.Item
-        style={{borderBottomColor:'#36cfc9',backgroundColor:'#b5f5ec'}}
+        style={{borderBottomColor:'#36cfc9',backgroundColor:'#002329'}}
         key={item.title}
         actions={[
           <IconText icon={ClockCircleOutlined } text="Round 1" key="list-vertical-star-o" />,
@@ -124,6 +118,7 @@ const RoundPlayList = () => (
       </List.Item>
     
     )}
-  />
+    />
+  </Card>
 );
 export default RoundPlayList;

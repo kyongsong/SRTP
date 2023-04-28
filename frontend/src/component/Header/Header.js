@@ -1,6 +1,6 @@
 import "./Header.css";
-import { PageHeader, Dropdown, message, Button} from "antd";
-import { DownloadOutlined, LinkOutlined ,UserOutlined, CommentOutlined} from '@ant-design/icons';
+import { PageHeader, Dropdown, message, Button,Card} from "antd";
+import { DownloadOutlined, LinkOutlined ,UserOutlined, CommentOutlined,DribbbleOutlined } from '@ant-design/icons';
 import Wrapper from "../../assets/wrappers/Header";
 
 var store = window.localStorage
@@ -31,9 +31,9 @@ const menuProps = {
 
 function Header(props) {
   return (
-    <Wrapper>
+  <Wrapper>
     <PageHeader
-      style={{ backgroundColor: '#13c2c2'}}
+      style={{ backgroundColor: '#1f1f1f'}}
       title="篮球战术分析系统"
       className="site-page-header"
       extra={[
@@ -43,8 +43,11 @@ function Header(props) {
       ]}
       
     >
+     
+      
     </PageHeader>
     </Wrapper>
+  
   );
 }
 

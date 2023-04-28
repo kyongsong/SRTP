@@ -5,7 +5,9 @@
     top: 180px;
 
 }
-
+.Background {
+   background: '#000';
+}
 .Basketball_Background {
     
  
@@ -49,7 +51,7 @@
     
     /* left:1320px; */
     left:1440px;
-    top:80px;
+    top:72px;
     
     
     

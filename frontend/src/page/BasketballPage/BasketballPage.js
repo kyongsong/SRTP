@@ -15,13 +15,14 @@ import Sidebar from '../../component/Sidebar/Sidebar';
 import Header1 from '../../component/Header/Header.js'
 import PlayList from '../../component/RoundPlayLIst/RoundPlayList.js'
 import ScoreBoard from '../../component/ScoreBoard/ScoreBoard';
+import PlayBar from '../../component/PlayProgressBar/PlayProgressBar.js'
+import BackGround from '../../assets/Chitty Chitty Bang Bang.png'
 
 
 var store = window.localStorage
 var username1 = store.getItem("UserName")
 const { Header, Footer, Sider, Content } = Layout;
-//测试 画板功能
-//衔接 前后端
+
 
 
 
@@ -360,22 +361,24 @@ function BasketballPage() {
     }
 
     
-
+    
     return (
-    <div>
-        <Header1/> 
-    <div className='App'>
+    
+    
+        
+    <div style={{background: '#002329'}}>
+      
          
-        
-        
+         <Header1/> 
+        <Sidebar/>
          
         {/* <Header1/>  */}
-        <Sidebar/>
+        
         
         
         
             
-            
+      
             
         
             <div className="Input" >
@@ -413,14 +416,18 @@ function BasketballPage() {
             
                
              <img src={BasketballBg} className='Basketball_Background'></img>
+           
                 
-            
+             
             
             
              <div className='siderStyle'>
                 
                 <PlayList width="200"/>
             </div> 
+        
+            <PlayBar />
+            
             
             
             <div  className="Canvas">
@@ -452,7 +459,7 @@ function BasketballPage() {
           
 
     </div>
-    </div>
+    
     )
 }
 
