@@ -3,7 +3,7 @@ import os
 import json
 import numpy as np
 from fastdtw import fastdtw
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify, Response
 
 import dtw
 
@@ -18,6 +18,16 @@ index_value = 0
 def add_routes(app):
     @app.route('/')
     @app.route('/<path:path>')
+    # return team and score information
+    @app.route("/Team_Score", methods=["POST"])
+    def get_team_score() -> Response | str:
+        try:
+            team_names = {'home': 'Team A', 'visitor': 'Team B'}
+            return jsonify(team_names)
+        except Exception as _:
+            print(_)
+            return json.dumps({'status': 'failed'})
+
     # do the track matching algorithm
     @app.route("/Match", methods=['POST'])
     def matching() -> str:
@@ -88,7 +98,8 @@ def add_routes(app):
                     flag = 0
                     for starters in candidate_start:
                         for enders in candidate_end:
-                            if starters[1][0] == enders[1][0] and starters[1][1] == enders[1][1]:  # 0->team_id; 1->player_id
+                            if starters[1][0] == enders[1][0] and starters[1][1] == enders[1][
+                                1]:  # 0->team_id; 1->player_id
                                 candidate.append([starters, enders])
                                 # print("  player pos1: ", starters[1][2], starters[1][3])
                                 # print("  player pos2: ", enders[1][2], enders[1][3])

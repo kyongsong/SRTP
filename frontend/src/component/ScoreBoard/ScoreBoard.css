@@ -1,0 +1,37 @@
+/* .ant-card：设置了背景颜色、圆角和盒子阴影，以及内边距。
+   .ant-card:hover：当鼠标悬浮在卡片上时，设置了更强的盒子阴影和向上的移动效果。
+   .ant-card-meta-title：设置了标题的字体加粗、大小和居中对齐。
+   @media：在窗口宽度小于768px时，将卡片宽度设置为100%，并将左上角定位设置为0，以便适应响应式布局。 
+*/
+
+.ant-card {
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .ant-card:hover {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-4px);
+  }
+  
+  .ant-card-meta-title {
+    font-weight: bold;
+    font-size: 28px;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .ant-card {
+      width: 100%;
+      left: 0;
+      top: 0;
+      margin-bottom: 16px;
+    }
+  }
+  
