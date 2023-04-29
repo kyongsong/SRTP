@@ -6,7 +6,7 @@ import axios from 'axios'
 import request from '../../utils/request';
 import {useEffect,useRef} from 'react';
 
-import BasketballBg from './BasketballBackground.png'
+import BasketballBg from './BasketballBackgound2.jpg'
 import { SearchOutlined ,RedoOutlined} from '@ant-design/icons';
 
 import { Button, Checkbox, Form, Input, message,Layout} from 'antd';
@@ -85,7 +85,7 @@ function BasketballPage() {
             console.log("real "+ele.x,ele.y)
             
             let { x, y } = ele
-            let x1=(ele.x-6)/12.6
+            let x1=(ele.x-7)/12.6
             
             if(x1<0) x1=0;
             let y1=(ele.y-6)/13.26
@@ -101,7 +101,7 @@ function BasketballPage() {
                 if (isAllowDrawLine) {
                     let ele = windowToCanvas(theCanvas, e.clientX, e.clientY)
                     let { x, y } = ele
-                    let x1=(ele.x-6)/12.6
+                    let x1=(ele.x-7)/12.6
                     
                     if(x1<0) x1=0;
                     let y1=(ele.y-6)/13.26
@@ -169,20 +169,26 @@ function BasketballPage() {
 
        
          <Layout >
+         
             <Sider>
                 <Sidebar/>
                 
-            </Sider>
+            </Sider> 
 
             <Content style={{backgroundColor:'#006d75'}}>
                         <ScoreBoard/>
+                       
                         <img src={BasketballBg} className='Basketball_Background'></img>
                         <div  className="Canvas">
                             <canvas id="theCanvas" ></canvas>
                         </div>
-                        <BallAndPlayer/>
+                        
+                      
+                        
+                        
                         <InputRound/>
                         <PlayBar />
+                        <BallAndPlayer/>
                     {/* <div className='siderStyle'>
                 
                             <PlayList />

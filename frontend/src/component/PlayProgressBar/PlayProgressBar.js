@@ -29,12 +29,12 @@ const PlayProgressBar = () => {
   };
 
   return (
-    <Card
+    // <Card
       
-      bordered={false}
-      style={{ background: '#006d75', maxWidth: '1200px' ,position:"absolute",top:848,left:380}}
-    >
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+    //   bordered={false}
+    //   style={{ background: '#006d75', maxWidth: '1200px' ,position:"absolute",top:868,left:380}}
+    // >
+      <div style={{ display: 'flex', alignItems: 'center' ,position:"absolute",top:878,left:380}}>
         <Button
           onClick={handleFrontClipClick}
           icon={ <FastBackwardOutlined />}
@@ -59,12 +59,12 @@ const PlayProgressBar = () => {
           min={0}
           max={100}
           tipFormatter={null}
-          style={{ width: 1020 }}
+          style={{ width: 1080 }}
           
           trackStyle={{ backgroundColor: 'white' }}
         />
       </div>
-    </Card>
+    // </Card>
   );
 };
 
