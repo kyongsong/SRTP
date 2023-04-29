@@ -6,7 +6,7 @@ import axios from 'axios'
 import request from '../../utils/request';
 import {useEffect,useRef} from 'react';
 
-import BasketballBg from './BasketballBackgound2.jpg'
+import BasketballBg from './BasketballBackground2.jpg'
 import { SearchOutlined ,RedoOutlined} from '@ant-design/icons';
 
 import { Button, Checkbox, Form, Input, message,Layout} from 'antd';
@@ -29,12 +29,15 @@ var username1 = store.getItem("UserName")
 
 
 function BasketballPage() {
+    const [Matching_Round,setMatching_Round] =useState('');
+
     // Initial the Canvas
     useEffect(() => {
         
         var canvas = document.getElementById('theCanvas');
         canvas.setAttribute("width","1194");
         canvas.setAttribute("height","672");
+        
         
         var context = canvas.getContext('2d');
         var imageObj = new Image();
@@ -75,6 +78,7 @@ function BasketballPage() {
         let context = theCanvas.getContext('2d')
         let isAllowDrawLine = false
         console.log("MouseDown")
+        console.log(Matching_Round.data)
 
         var MoveTrack=new Array();
         //mouse down
@@ -83,6 +87,7 @@ function BasketballPage() {
             
             let ele = windowToCanvas(theCanvas, e.clientX, e.clientY)
             console.log("real "+ele.x,ele.y)
+           
             
             let { x, y } = ele
             let x1=(ele.x-7)/12.6
@@ -135,6 +140,8 @@ function BasketballPage() {
                    alert("匹配失败")
                 }else{
                     alert("回合:"+res.data.data[0][0]+"Start:"+res.data.data[0][1]+"End:"+res.data.data[0][2])
+                    setMatching_Round(res.data);
+                    
                 }
                 
                 
@@ -171,7 +178,7 @@ function BasketballPage() {
          <Layout >
          
             <Sider>
-                <Sidebar/>
+                <Sidebar Matching={Matching_Round}/>
                 
             </Sider> 
 

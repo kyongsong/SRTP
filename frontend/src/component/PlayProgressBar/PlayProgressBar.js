@@ -8,6 +8,8 @@ const PlayProgressBar = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [Clip, setClip] = useState(0);
   const [TotalClip,setTotalClip]=useState(0);
+
+  
   
 
   const handleProgressChange = value => {

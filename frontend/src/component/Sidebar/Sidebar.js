@@ -2,6 +2,8 @@ import { RedoOutlined , SettingOutlined, SearchOutlined,DribbbleOutlined ,EditOu
 import { Menu, Drawer} from 'antd';
 import React, { useState } from 'react';
 import Wrapper from '../../assets/wrappers/SideBar.js';
+import RoundPlayList from '../RoundPlayLIst/RoundPlayList.js';
+
 function getItem(label, key, icon, children, type) {
   return {
     key,
@@ -32,7 +34,8 @@ const items = [
 
 // submenu keys of first level
 const rootSubmenuKeys = ['sub1'];
-const Sidebar = () => {
+const Sidebar = (props) => {
+  console.log("SideBar "+ props.Matching.data)
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -153,10 +156,8 @@ const Sidebar = () => {
           
           onClick={onLink}
         />
-        <Drawer title="Matching Round" placement="right" onClose={onClose} open={open}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <Drawer title="Matching Round" placement="right" onClose={onClose} open={open} headerStyle={{backgroundColor: '#006d75' ,fontSize:20 } } bodyStyle={{backgroundColor:'#006d75'}}>
+          <RoundPlayList Matching={props}/>
       </Drawer>
       </div>
      

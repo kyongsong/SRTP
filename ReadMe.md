@@ -24,7 +24,25 @@
 
 ## 1.2 编写时注意事项
 
-### 1.2.1 有关转换坐标的问题
+### 1.2.1 前后端交互数据格式-JSON
+
++ @app.route("/Match", methods=['POST'])
+
+  
+
+  + 返回格式
+
+  ```json
+  {
+  	{'status': 'success', 'data': data_rst,'events':"Attacking", 'player_Name':"James" ,'AgainstTeam':"Lakers"}
+  }
+  ```
+
+  
+
+
+
+### 1.2.2 有关转换坐标的问题
 
 由于我们需要在战术板上画球员轨迹，并把符合轨迹的场面显示在浏览器中。因此涉及转换坐标的有以下几个关系。
 
@@ -89,15 +107,17 @@
 
 #### 1.前端
 
-+ Basketball Image从left 100px 调整为了 200px 后续的一系列参数需要调整
++ Basketball Image从left 200px 调整为了 380px 后续的一系列参数需要调整
   + 可能会出现画的轨迹和检索轨迹不符合
 
 + ScoreBoard的实现
   + 比分部分还没有实现
 + RoundPlay List的前后端衔接
-  + RoundPlay List 改成弹窗的形式
+  + RoundPlay List 改成弹窗的形式（可以得到数据）
+  + 点击跳转的功能还没有实现
 
 #### 2.后端
 
 + backend算法实现
   + dtw算法-检索速度过慢
+  + encoder算法还没有融入
