@@ -109,12 +109,13 @@
 
 + Basketball Image从left 200px 调整为了 380px 后续的一系列参数需要调整
   + 可能会出现画的轨迹和检索轨迹不符合
-
 + ScoreBoard的实现
   + 比分部分还没有实现
 + RoundPlay List的前后端衔接
-  + RoundPlay List 改成弹窗的形式（可以得到数据）
-  + 点击跳转的功能还没有实现
+  + RoundPlay List 改成弹窗的形式（实现）
+  + 点击跳转的页面-需要完成点击窗户收回
+  + 后续可添加预览图
++ PlayProgressBar需要完成
 
 #### 2.后端
 

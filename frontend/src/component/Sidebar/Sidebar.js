@@ -35,7 +35,7 @@ const items = [
 // submenu keys of first level
 const rootSubmenuKeys = ['sub1'];
 const Sidebar = (props) => {
-  console.log("SideBar "+ props.Matching.data)
+  
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);

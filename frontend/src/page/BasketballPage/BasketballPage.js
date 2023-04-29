@@ -78,7 +78,7 @@ function BasketballPage() {
         let context = theCanvas.getContext('2d')
         let isAllowDrawLine = false
         console.log("MouseDown")
-        console.log(Matching_Round.data)
+        
 
         var MoveTrack=new Array();
         //mouse down
