@@ -7,14 +7,12 @@ import axios from 'axios';
 const { Meta } = Card;
 
 function ScoreBoard(){
-  const [teamNames, setTeamNames] = useState({ home: '', visitor: '' });
-  const [team1Score,set_team1Score]=useState('');
-  const [team2Score,set_team2Score]=useState('');
+  const [teamNames_Scores, setTeamNamesAndScore] = useState({ home: '', visitor: '', hscore: '', vscore: '' });
 
   useEffect(() => {
     request.post('/Team_Score').then((response) => {
       console.log(response.data);
-      setTeamNames(response.data);
+      setTeamNamesAndScore(response.data);
     });
   }, []);
 
@@ -33,8 +31,8 @@ function ScoreBoard(){
     }}
   >
     <Meta
-      title={`${teamNames.home} VS ${teamNames.visitor}`}
-      description={`${team1Score} : ${team2Score}`}
+      title={`${teamNames_Scores.home} VS ${teamNames_Scores.visitor}`}
+      //description={`${teamNames_Scores.hscore} : ${teamNames_Scores.vscore}`}
     />
   </Card>
   );

@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 
-
 class SequenceEncoder(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, bidirectional=False):
         super(SequenceEncoder, self).__init__()
@@ -27,13 +26,29 @@ class SequenceEncoder(nn.Module):
         return hn
 
 
-# example usage
-seq1 = torch.tensor([[1, 2, 4, 5, 6, 7], [1, 2, 4, 5, 6, 7]])
-seq2 = torch.tensor([[100, 3, 5], [1, 4, 7]])
-encoder = SequenceEncoder(input_size=1, hidden_size=16, num_layers=2, bidirectional=True)
-if torch.cuda.is_available():
-    encoder.cuda()
-seq1_encoding = encoder(seq1.unsqueeze(2).float())
-seq2_encoding = encoder(seq2.unsqueeze(2).float())
-distance = nn.functional.pairwise_distance(seq1_encoding, seq2_encoding)
-print(distance.detach().numpy())
+def cal_encoder_dist(seq1, seq2):
+    max_len = max(len(seq1), len(seq2))
+    seq1_padded = [(0, 0)] * (max_len - len(seq1)) + seq1
+    seq2_padded = [(0, 0)] * (max_len - len(seq2)) + seq2
+
+    seq1_tensor = torch.tensor(seq1_padded)
+    seq2_tensor = torch.tensor(seq2_padded)
+
+    encoder = SequenceEncoder(input_size=2, hidden_size=16, num_layers=2, bidirectional=True)
+    if torch.cuda.is_available():
+        encoder.cuda()
+
+    seq1_encoding = encoder(seq1_tensor.unsqueeze(0).float())
+    seq2_encoding = encoder(seq2_tensor.unsqueeze(0).float())
+
+    # 使用余弦相似度计算相似度
+    sim = nn.functional.cosine_similarity(seq1_encoding, seq2_encoding)
+
+    return 1 - sim.item()
+
+
+# 示例用法
+# seq1 = [(1, 1), (2, 2), (3, 3)]
+# seq2 = [(1, 1), (3, 3)]
+# dist = cal_encoder_dist(seq1, seq2)
+# print(dist)
