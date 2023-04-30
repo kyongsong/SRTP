@@ -1,9 +1,11 @@
-import { Card ,Typography ,Space} from 'antd';
+import { Card ,Typography ,Space,Divider} from 'antd';
 import React from 'react';
 import { useEffect } from 'react';
 import BasketballBg from '../../../page/BasketballPage/BasketballBackground2.jpg'
 import {UserOutlined,ClockCircleFilled ,ExclamationCircleFilled,SkinFilled  } from '@ant-design/icons'
 import request from '../../../utils/request';
+
+var store = window.localStorage
 const { Paragraph } = Typography;
 
 const IconText = ({ icon, text }) => (
@@ -26,6 +28,9 @@ function roundcard(props){
             "end_index":props.end_index
         };
         console.log(request_Data)
+        store.setItem("TotalClip",props.end_index-props.start_index+1)
+        store.setItem("CurClip",0);
+        
 
         request.post('/Analysis-Match', request_Data).then(
             result =>{
@@ -49,7 +54,11 @@ function roundcard(props){
                 clearInterval(timer);
                 //start Timer
                 timer = setInterval(function () {
+                    
                     var value = Movement_Data[cnt];
+                    // console.log(cnt)
+                    
+                      store.setItem("CurClip",cnt);
                     
                     /*alert(cnt)*/
                     if (cnt == result.data.size) {
@@ -224,6 +233,7 @@ function roundcard(props){
     
   }
     return (
+       
         <Card
       style={{
         backgroundColor: '#006d75',
@@ -240,16 +250,19 @@ function roundcard(props){
        <img src={BasketballBg} style={{width:"40%",position:"absolute",left:0,top:0}}></img>
        <Space style={{position:'absolute',left:140,top:10}}>
             <IconText icon={UserOutlined} text={props.player_Name} key="list-vertical-star-o" />
+            <Divider type="vertical" />
        </Space>
-
+      
        <Space style={{position:'absolute',left:220,top:10}}>
             <IconText icon={ClockCircleFilled} text={props.round} key="list-vertical-star-o" />   
+            <Divider type="vertical" />
        </Space>
-
+       
        <Space style={{position:'absolute',left:140,top:40}}>
             <IconText icon={ExclamationCircleFilled} text={props.events} key="list-vertical-star-o" />      
+            <Divider type="vertical" />
        </Space>
-
+       
        <Space style={{position:'absolute',left:220,top:40}}>
             <IconText icon={SkinFilled} text={props.AgainstTeam} key="list-vertical-star-o" />   
        </Space>
@@ -262,6 +275,7 @@ function roundcard(props){
        
        
     </Card>
+    
 
     )
 }
