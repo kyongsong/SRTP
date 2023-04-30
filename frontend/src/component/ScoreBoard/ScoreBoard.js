@@ -32,7 +32,7 @@ function ScoreBoard(){
   >
     <Meta
       title={`${teamNames_Scores.home} VS ${teamNames_Scores.visitor}`}
-      //description={`${teamNames_Scores.hscore} : ${teamNames_Scores.vscore}`}
+      description={`${teamNames_Scores.hscore} : ${teamNames_Scores.vscore}`}
     />
   </Card>
   );

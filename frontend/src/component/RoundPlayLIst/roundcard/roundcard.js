@@ -226,9 +226,7 @@ function roundcard(props){
             }
             
             }
-          )
-            
-    
+        )
     
     
   }

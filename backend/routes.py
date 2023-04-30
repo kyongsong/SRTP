@@ -1,3 +1,5 @@
+from typing import Dict, Any, List
+
 import flask
 import os
 import json
@@ -72,7 +74,7 @@ def dtw_policy():
 
             # now the candidate_start and candidate_end are filled with all the frames in this round
             if len(candidate_start) == 0 or len(candidate_end) == 0:
-                print("No match for round", index)
+                # print("No match for round", index)
                 # raise Exception
                 continue
 
@@ -181,7 +183,7 @@ def encoder_policy():
 
             # now the candidate_start and candidate_end are filled with all the frames in this round
             if len(candidate_start) == 0 or len(candidate_end) == 0:
-                print("No match for round", index)
+                # print("No match for round", index)
                 # raise Exception
                 continue
 
@@ -242,6 +244,8 @@ def add_routes(app):
     @app.route("/Team_Score", methods=["POST"])
     def get_team_score() -> Response | str:
         try:
+            global index_value
+            print("score", index_value)
             with open(os.path.join(game_name, str(index_value), 'metadata.json'), 'r') as meta_f:
                 metadata = json.load(meta_f)  # metadata of current round
                 team_names_scores = {'home': metadata['home']['name'], 'visitor': metadata['visitor']['name'],
@@ -260,7 +264,18 @@ def add_routes(app):
         #         {round, start frame number, end frame number, team_id, player_id}
         # """
         try:
-            data_rst = encoder_policy()
+            alg = flask.request.json.get("ChoosingAlgorithm")
+            print(alg)
+            if alg == "\"dtw\"":
+                print("Choose dtw")
+                data_rst = dtw_policy()
+            elif alg == "\"encoder\"":
+                print("Choose encoder")
+                data_rst = encoder_policy()
+            else:
+                print("default")
+                data_rst = dtw_policy()
+
             return json.dumps({'status': 'success', 'data': data_rst})
         except Exception as _:
             print(_)
@@ -286,7 +301,7 @@ def add_routes(app):
 
     # animation of trajectories
     @app.route("/Analysis-Match", methods=['POST'])
-    def movement() -> str:
+    def movement() -> dict[str, str | int | list[Any] | Any] | str:
         try:
             # 这里发来的请求需要加个参数 event_id = xxx，选择播放第几个回合的轨迹
             global event_id_value
