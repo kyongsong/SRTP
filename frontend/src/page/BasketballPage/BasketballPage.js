@@ -22,7 +22,7 @@ import InputRound from '../../component/InputRound/InputRound';
 const { Header, Footer, Sider, Content } = Layout;
 
 var store = window.localStorage
-var username1 = store.getItem("UserName")
+
 
 
 
@@ -127,9 +127,17 @@ function BasketballPage() {
         theCanvas.onmouseup = function() {
             isAllowDrawLine = false
             var input =JSON.stringify(MoveTrack)
+            var Choosing;
+            if(store.getItem("ChoosingAlgorithm")==null){
+                Choosing="dtw"
+            }
+            else{
+                Choosing=store.getItem("ChoosingAlgorithm")
+            }
+            var ChoosingAlgorithm=JSON.stringify(Choosing)
             
-            var data={"MoveTrack":input}
-        
+            var data={"MoveTrack":input,"ChoosingAlgorithm":ChoosingAlgorithm}
+            console.log(data)
            
             request.post('/Match', data).then(
                 res =>{

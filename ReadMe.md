@@ -28,16 +28,30 @@
 
 + @app.route("/Match", methods=['POST'])
 
+  + 提交格式
+
+    + 如果sidebar不选择相应算法，默认为dtw
+
+    + 选择encoder的时候提交格式如下
   
+      ```
+      {MoveTrack: '[{"x1":11.190476190476192,"y1":10.180995475113122}…{"x1":36.904761904761905,"y1":12.44343891402715}]', ChoosingAlgorithm: '"encoder"'}
+      ```
 
+    + 选择dtw的时候提交格式如下
+  
+    ```
+    {MoveTrack: '[{"x1":11.190476190476192,"y1":10.180995475113122}…{"x1":36.904761904761905,"y1":12.44343891402715}]', ChoosingAlgorithm: '"dtw"'}
+    ```
+  
   + 返回格式
-
+  
   ```json
   {
   	{'status': 'success', 'data': data_rst,'events':"Attacking", 'player_Name':"James" ,'AgainstTeam':"Lakers"}
   }
   ```
-
+  
   
 
 

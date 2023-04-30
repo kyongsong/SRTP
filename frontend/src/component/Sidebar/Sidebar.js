@@ -3,7 +3,7 @@ import { Menu, Drawer} from 'antd';
 import React, { useState } from 'react';
 import Wrapper from '../../assets/wrappers/SideBar.js';
 import RoundPlayList from '../RoundPlayLIst/RoundPlayList.js';
-
+var storage=window.localStorage;
 function getItem(label, key, icon, children, type) {
   return {
     key,
@@ -58,10 +58,10 @@ const Sidebar = (props) => {
       window.location.href = "./"
     }
     else if(key.key=='2'){
-      window.location.href = "./Total"
+      storage.setItem("ChoosingAlgorithm","dtw")
     }
     else if (key.key == '3') {
-      window.location.href = "./Center"
+      storage.setItem("ChoosingAlgorithm","encoder")
     }
     else if(key.key=='4'){
       window.location.href="./Room"
