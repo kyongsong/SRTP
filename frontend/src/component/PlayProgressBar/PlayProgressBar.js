@@ -53,7 +53,8 @@ function  PlayProgressBar  () {
   const handlePlayPauseClick = () => {
     if(store.getItem("event_id")!==null&&store.getItem("start_index")!==null&&store.getItem("end_index")!==null)
     {
-      setIsPlaying(!isPlaying);
+      
+      
       
 
       var request_Data={
@@ -61,7 +62,7 @@ function  PlayProgressBar  () {
         "start_index":store.getItem("start_index"),
         "end_index":store.getItem("end_index")
       };
-    console.log(request_Data)
+    
     
     store.setItem("TotalClip",store.getItem("end_index")-store.getItem("start_index")+1)
     
@@ -99,6 +100,10 @@ function  PlayProgressBar  () {
               /*alert(cnt)*/
               if (cnt == result.data.size) {
                   clearInterval(timer);
+                  
+               
+                  setProgress(0)
+                  
                   return;
               }
               else
@@ -261,7 +266,7 @@ function  PlayProgressBar  () {
 
          
       }
-      setIsPlaying(!isPlaying);
+     
     
     
       }
