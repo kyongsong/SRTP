@@ -129,7 +129,7 @@
   + RoundPlay List 改成弹窗的形式（实现）
   + 点击跳转的页面-需要完成点击窗户收回
   + 后续可添加预览图
-+ PlayProgressBar需要完成
++ PlayProgressBar 完成
 
 #### 2.后端
 
