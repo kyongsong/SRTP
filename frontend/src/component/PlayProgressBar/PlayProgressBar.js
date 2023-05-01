@@ -262,7 +262,7 @@ function  PlayProgressBar  () {
 
               }
               
-          }, 15);
+          }, 20);
 
          
       }

@@ -156,7 +156,7 @@ const Sidebar = (props) => {
           
           onClick={onLink}
         />
-        <Drawer title="Matching Round" placement="right" onClose={onClose} open={open} headerStyle={{backgroundColor: '#006d75' ,fontSize:20 } } bodyStyle={{backgroundColor:'#006d75'}}>
+        <Drawer title="Matching Round" placement="right" onClose={onClose} open={open} headerStyle={{backgroundColor: '#00474f' ,fontSize:20 } } bodyStyle={{backgroundColor:'#006d75'}}>
           <RoundPlayList Matching={props}/>
       </Drawer>
       </div>
