@@ -30,6 +30,7 @@ const items = [
     
   ]),
   getItem('Matching', '7', <SearchOutlined />),
+  getItem('Analysis', '8', <SearchOutlined />),
 ];
 
 // submenu keys of first level
@@ -127,8 +128,12 @@ const Sidebar = (props) => {
        canvas.width=canvas.width;
       console.log('reset2')
     }
-    else {
+    else if(key.key == '7'){
       setOpen(true);
+    }
+    else {
+      
+      window.location.href="./Analysis"
     }
   };
   const theme={
@@ -147,7 +152,7 @@ const Sidebar = (props) => {
         theme="dark"
           style={{
             width: 200,
-            height:920,
+            height:990,
             fontSize:20,
             
             backgroundColor: '#00474f',

@@ -192,12 +192,12 @@ function BasketballPage() {
             <Content style={{backgroundColor:'#006d75'}}>
                         <ScoreBoard/>
                        
-                        {/* <img src={BasketballBg} className='Basketball_Background'></img> */}
+                        <img src={BasketballBg} className='Basketball_Background'></img>
                         <div  className="Canvas">
                             <canvas id="theCanvas" ></canvas>
                         </div>
                         
-                      <HeatMap/>
+                    
                         
                         
                         <InputRound/>
