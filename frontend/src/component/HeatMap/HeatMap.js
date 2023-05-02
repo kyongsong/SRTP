@@ -1,3 +1,5 @@
+import BasketballBg from '../../page/BasketballPage/BasketballBackground2.jpg'
+
 function HeatMap(){
   // <!-- 生成投篮数据的坐标(x, y) -->
   
@@ -6,7 +8,7 @@ function HeatMap(){
       x.push(Math.random() * 500);
       y.push(Math.random() * 300 + 100);
     }
- 
+   
    // 计算投篮数据的热点图
    var bins = 20;
    var heatmap = new Array(bins).fill(0).map(() => new Array(bins).fill(0));
@@ -37,19 +39,16 @@ function HeatMap(){
    }
  
   return (
-<svg width="500" height="500">
-  <image xlink:href="BasketballBackground.png" width="500" height="500"/>
+  <svg  width="500" height="500"> 
+        <image xlinkHref={BasketballBg} width="500" height="500"/>
+        <g>
+        <rect x="0" y="0" width="500" height="500" fill="none" pointerEvents="all" />
+        <g id="hotspots"></g>
+        </g>
+   </svg > 
 
- 
 
-  {/* <!-- 绘制投篮热点图 --> */}
-  <g>
-    <rect x="0" y="0" width="500" height="500" fill="none" pointer-events="all"/>
-    <g id="hotspots"></g>
-  </g>
 
- 
-</svg>
   )
 }
 

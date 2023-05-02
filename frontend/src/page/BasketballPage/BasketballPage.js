@@ -18,6 +18,7 @@ import ScoreBoard from '../../component/ScoreBoard/ScoreBoard';
 import PlayBar from '../../component/PlayProgressBar/PlayProgressBar.js'
 import BallAndPlayer from '../../component/BallAndPlayer/BallAndPlayer';
 import InputRound from '../../component/InputRound/InputRound';
+import HeatMap from '../../component/HeatMap/HeatMap'
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -191,12 +192,12 @@ function BasketballPage() {
             <Content style={{backgroundColor:'#006d75'}}>
                         <ScoreBoard/>
                        
-                        <img src={BasketballBg} className='Basketball_Background'></img>
+                        {/* <img src={BasketballBg} className='Basketball_Background'></img> */}
                         <div  className="Canvas">
                             <canvas id="theCanvas" ></canvas>
                         </div>
                         
-                      
+                      <HeatMap/>
                         
                         
                         <InputRound/>
