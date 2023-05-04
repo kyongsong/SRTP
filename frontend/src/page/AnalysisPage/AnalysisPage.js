@@ -38,26 +38,30 @@ function AnalysisPage(){
     
         
     
-       <div style={{backgroundColor:'#006d75'}}> 
+    
        
-        <Layout >
+        <Layout 
+        style={{
+            minHeight: '100vh',
+            minWidth:'120vh'
+          }}>
 
         <Header1/> 
 
        
-         <Layout >
+         <Layout style={{
+        
+      }}>
          
-            <Sider>
-                 <Sidebar /> 
-                
-            </Sider> 
+          
 
             <Content style={{backgroundColor:'#006d75'}}>
                         <ScoreBoard/> 
                         
-                        <HeatMap />
-                        <CriticalData/>
+                       
+                        <CriticalData />
                         <ScoreMap/>
+                        <HeatMap  />
                         
                         
                    
@@ -71,7 +75,7 @@ function AnalysisPage(){
          </Layout > 
             
         
-        </div>
+ 
         
                   
     )
