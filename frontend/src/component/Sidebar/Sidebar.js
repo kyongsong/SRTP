@@ -19,18 +19,19 @@ const items = [
   getItem('Algorithm', 'sub1', <DribbbleOutlined />, [
     getItem('dtw', '2'),
     getItem('encoder', '3'),
+    getItem('GraphicFeatures', '4'),
     
     
   ]),
   getItem('Tool', 'sub2', <ToolOutlined />, [
-    getItem('Scratch', '4',<EditOutlined />),
-    getItem('Click', '5',<DashOutlined />),
-    getItem('Reset', '6',<RedoOutlined  />),
+    getItem('Scratch', '5',<EditOutlined />),
+    getItem('Click', '6',<DashOutlined />),
+    getItem('Reset', '7',<RedoOutlined  />),
     
     
   ]),
-  getItem('Matching', '7', <SearchOutlined />),
-  getItem('Analysis', '8', <SearchOutlined />),
+  getItem('Matching', '8', <SearchOutlined />),
+  getItem('Analysis', '9', <SearchOutlined />),
 ];
 
 // submenu keys of first level
@@ -64,13 +65,16 @@ const Sidebar = (props) => {
     else if (key.key == '3') {
       storage.setItem("ChoosingAlgorithm","encoder")
     }
-    else if(key.key=='4'){
-      window.location.href="./Room"
+    else if (key.key == '4') {
+      storage.setItem("ChoosingAlgorithm","graphic_features")
     }
     else if(key.key=='5'){
+      window.location.href="./Room"
+    }
+    else if(key.key=='6'){
       window.location.href="./Device"
     }
-    else if (key.key == '6') {
+    else if (key.key == '7') {
       var ball = document.getElementById("Ball");
        
             
@@ -128,7 +132,7 @@ const Sidebar = (props) => {
        canvas.width=canvas.width;
       console.log('reset2')
     }
-    else if(key.key == '7'){
+    else if(key.key == '8'){
       setOpen(true);
     }
     else {

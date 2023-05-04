@@ -170,12 +170,13 @@ def add_routes(app):
             print(alg)
             if alg == "\"dtw\"":
                 print("Choose dtw")
-                # data_rst = dtw_policy()
                 data_rst = trajectory_template(0)
             elif alg == "\"encoder\"":
                 print("Choose encoder")
-                # data_rst = encoder_policy()
                 data_rst = trajectory_template(1)
+            elif alg == "\"graphic_features\"":
+                print("Choose graphic_features")
+                data_rst = trajectory_template(2)
             else:
                 print("default")
                 s = 'dtw'
