@@ -8,6 +8,7 @@ from fastdtw import fastdtw
 from flask import Flask, request, render_template, jsonify, Response
 import dtw
 import encoder
+import graphic_features
 
 # global Variable for the event_id and index
 event_id_value = 0
@@ -16,13 +17,7 @@ index_value = 0
 # 比赛名称
 game_name = '0021500001'
 
-
-def dtw_policy():
-    """
-    dtw_policy: matching by dtw algorithm
-    :return: matched results to frontend
-    """
-
+def trajectory_template(search_method):
     # 1 处理从前端获取的轨迹信息，将其存储在scatch_track中
     scatch_track = flask.request.json.get("MoveTrack")
     print(scatch_track)
@@ -45,197 +40,104 @@ def dtw_policy():
     # 2 从后端数据中进行匹配
     game = os.listdir(game_name)  # info of one game
     data_rst = []
-    threshold = 3
+    threshold = 1
     dis_list = []  # final answer trace list
 
-    for index in game:  # index: an index represents a round in the game
-        candidate_start = []
-        candidate_end = []
-        # load metadata
-        with open(os.path.join(game_name, index, 'metadata.json'), 'r') as meta_f:
-            metadata = json.load(meta_f)  # metadata of current round
+    while len(data_rst) < 2:
+        data_rst = []
+        dis_list = []
+        for index in game:  # index: an index represents a round in the game
+            candidate_start = []
+            candidate_end = []
+            # load metadata
+            with open(os.path.join(game_name, index, 'metadata.json'), 'r') as meta_f:
+                metadata = json.load(meta_f)  # metadata of current round
 
-        with open(os.path.join(game_name, index, 'movement_refined_shot_clock.json'), 'r') as f:
-            mvment = json.load(f)  # mvment is filled with the refined data of current round
+            with open(os.path.join(game_name, index, 'movement_refined_shot_clock.json'), 'r') as f:
+                mvment = json.load(f)  # mvment is filled with the refined data of current round
 
-            cnt = metadata['possession_start_index']
-            # frame: frame of round
-            for frame in mvment:
-                positions = frame["player_position"]
-                for player in positions:
-                    if dtw.dist(player[2], player[3], scatch[0][0], scatch[0][1]) < threshold:
-                        candidate_start.append([cnt, player])
-                    if dtw.dist(player[2], player[3], scatch[len(scatch) - 1][0],
-                                scatch[len(scatch) - 1][1]) < threshold:
-                        candidate_end.append([cnt, player])
-                cnt = cnt + 1  # cnt = frame_id
-                if cnt > metadata['possession_end_index']:
-                    break
+                cnt = metadata['possession_start_index']
+                # frame: frame of round
+                for frame in mvment:
+                    positions = frame["player_position"]
+                    for player in positions:
+                        if dtw.dist(player[2], player[3], scatch[0][0], scatch[0][1]) < threshold:
+                            candidate_start.append([cnt, player])
+                        if dtw.dist(player[2], player[3], scatch[len(scatch) - 1][0],
+                                    scatch[len(scatch) - 1][1]) < threshold:
+                            candidate_end.append([cnt, player])
+                    cnt = cnt + 1  # cnt = frame_id
+                    if cnt > metadata['possession_end_index']:
+                        break
 
-            # now the candidate_start and candidate_end are filled with all the frames in this round
-            if len(candidate_start) == 0 or len(candidate_end) == 0:
-                # print("No match for round", index)
-                # raise Exception
-                continue
+                # now the candidate_start and candidate_end are filled with all the frames in this round
+                if len(candidate_start) == 0 or len(candidate_end) == 0:
+                    # print("No match for round", index)
+                    # raise Exception
+                    continue
 
-            candidate = []
-            flag = False
-            for starters in candidate_start:
-                for enders in candidate_end:
-                    if starters[1][0] == enders[1][0] and starters[1][1] == enders[1][1]:  # 0->team_id; 1->player_id
-                        candidate.append([starters, enders])
-                        # print("  player pos1: ", starters[1][2], starters[1][3])
-                        # print("  player pos2: ", enders[1][2], enders[1][3])
-                        flag = True
+                candidate = []
+                flag = False
+                for starters in candidate_start:
+                    for enders in candidate_end:
+                        if starters[1][0] == enders[1][0] and starters[1][1] == enders[1][1]:  # 0->team_id; 1->player_id
+                            candidate.append([starters, enders])
+                            # print("  player pos1: ", starters[1][2], starters[1][3])
+                            # print("  player pos2: ", enders[1][2], enders[1][3])
+                            flag = True
+                        if flag:
+                            break
                     if flag:
                         break
-                if flag:
-                    break
 
-            # now candidate is filled with candidates' start point and end point.
-            for idx_candidate in range(len(candidate)):
-                member = candidate[idx_candidate]
-                list_trace = []
-                i = member[0][0]
-                while i <= member[1][0]:
-                    list_trace.append(mvment[i])
-                    i = i + 1
-                # now list_trace is filled with the frame track of the points.
-                if len(list_trace) <= 1:
-                    continue
-                list_cmp = []
-                for dict_form_cmp in list_trace:
-                    list_pos = dict_form_cmp["player_position"]
-                    for list_player in list_pos:
-                        if list_player[0] == member[0][1][0] and list_player[1] == member[0][1][1]:
-                            list_cmp.append([member[0][1][2], member[0][1][3]])
-                distance, route = fastdtw(list_cmp, scatch)
-                dis_list.append([distance, index, member])
+                # now candidate is filled with candidates' start point and end point.
+                for idx_candidate in range(len(candidate)):
+                    member = candidate[idx_candidate]
+                    list_trace = []
+                    i = member[0][0]
+                    while i <= member[1][0]:
+                        list_trace.append(mvment[i])
+                        i = i + 1
+                    # now list_trace is filled with the frame track of the points.
+                    if len(list_trace) <= 1:
+                        continue
+                    list_cmp = []
+                    for dict_form_cmp in list_trace:
+                        list_pos = dict_form_cmp["player_position"]
+                        for list_player in list_pos:
+                            if list_player[0] == member[0][1][0] and list_player[1] == member[0][1][1]:
+                                list_cmp.append([member[0][1][2], member[0][1][3]])
 
-    dis_list.sort(key=lambda x: x[0])
-    # now the idx_min labels the best matching.
-    print(len(dis_list))
-    i = 0
-    while i < 5 and i < len(dis_list):
-        dict_cur = dis_list[i][2]
-        # dict_cur -> an element of candidate
-        # dict_cur[0] -> starter, an element of candidate_start -> [cnt, player]
-        # dict_cur[0][0] -> cnt
-        data_rst.append([dis_list[i][1], dict_cur[0][0], dict_cur[1][0]])
-        i = i + 1
+                    # here is actual method selection.
+                    if search_method == 0: # dtw
+                        distance, route = fastdtw(list_cmp, scatch)
+                        # here route is actually not used.
+                    elif search_method == 1: # encoder
+                        distance = encoder.cal_encoder_dist(list_cmp, scatch)
+                    elif search_method == 2: # graphic_features based
+                        distance = 1 - graphic_features.trajectory_similarity(list_cmp, scatch)
+                    else:
+                        print(search_method + ": This method is not implemented yet!")
+                        distance, route = fastdtw(list_cmp, scatch)
+                    dis_list.append([distance, index, member])
+
+        dis_list.sort(key=lambda x: x[0])
+        # now the idx_min labels the best matching.
+        print(len(dis_list))
+        i = 0
+        while i < 5 and i < len(dis_list):
+            dict_cur = dis_list[i][2]
+            # dict_cur -> an element of candidate
+            # dict_cur[0] -> starter, an element of candidate_start -> [cnt, player]
+            # dict_cur[0][0] -> cnt
+            data_rst.append([dis_list[i][1], dict_cur[0][0], dict_cur[1][0]])
+            i = i + 1
+        threshold = threshold + 0.5
+
     print(data_rst)
+    print(threshold)
 
     return data_rst
-def encoder_policy():
-    """
-    encoder_policy: matching by encoder algorithm
-    :return: matched results to frontend
-    """
-
-    # 1 处理从前端获取的轨迹信息，将其存储在scatch_track中
-    scatch_track = flask.request.json.get("MoveTrack")
-    print(scatch_track)
-    scatch1 = json.loads(scatch_track)
-    scatch = []
-    index = 0
-    for i in scatch1:
-        index = 0
-        x = 0
-        y = 0
-        for j in i.values():
-            if index == 0:
-                x = j
-                index = index + 1
-            elif index == 1:
-                y = j
-                index = index + 1
-                scatch.append([x, y])
-
-    # 2 从后端数据中进行匹配
-    game = os.listdir(game_name)  # info of one game
-    data_rst = []
-    threshold = 3
-    dis_list = []  # final answer trace list
-
-    for index in game:  # index: an index represents a round in the game
-        candidate_start = []
-        candidate_end = []
-        # load metadata
-        with open(os.path.join(game_name, index, 'metadata.json'), 'r') as meta_f:
-            metadata = json.load(meta_f)  # metadata of current round
-
-        with open(os.path.join(game_name, index, 'movement_refined_shot_clock.json'), 'r') as f:
-            mvment = json.load(f)  # mvment is filled with the refined data of current round
-
-            cnt = metadata['possession_start_index']
-            # frame: frame of round
-            for frame in mvment:
-                positions = frame["player_position"]
-                for player in positions:
-                    if dtw.dist(player[2], player[3], scatch[0][0], scatch[0][1]) < threshold:
-                        candidate_start.append([cnt, player])
-                    if dtw.dist(player[2], player[3], scatch[len(scatch) - 1][0],
-                                scatch[len(scatch) - 1][1]) < threshold:
-                        candidate_end.append([cnt, player])
-                cnt = cnt + 1  # cnt = frame_id
-                if cnt > metadata['possession_end_index']:
-                    break
-
-            # now the candidate_start and candidate_end are filled with all the frames in this round
-            if len(candidate_start) == 0 or len(candidate_end) == 0:
-                # print("No match for round", index)
-                # raise Exception
-                continue
-
-            candidate = []
-            flag = False
-            for starters in candidate_start:
-                for enders in candidate_end:
-                    if starters[1][0] == enders[1][0] and starters[1][1] == enders[1][1]:  # 0->team_id; 1->player_id
-                        candidate.append([starters, enders])
-                        # print("  player pos1: ", starters[1][2], starters[1][3])
-                        # print("  player pos2: ", enders[1][2], enders[1][3])
-                        flag = True
-                    if flag:
-                        break
-                if flag:
-                    break
-
-            # now candidate is filled with candidates' start point and end point.
-            for idx_candidate in range(len(candidate)):
-                member = candidate[idx_candidate]
-                list_trace = []
-                i = member[0][0]
-                while i <= member[1][0]:
-                    list_trace.append(mvment[i])
-                    i = i + 1
-                # now list_trace is filled with the frame track of the points.
-                if len(list_trace) <= 1:
-                    continue
-                list_cmp = []
-                for dict_form_cmp in list_trace:
-                    list_pos = dict_form_cmp["player_position"]
-                    for list_player in list_pos:
-                        if list_player[0] == member[0][1][0] and list_player[1] == member[0][1][1]:
-                            list_cmp.append([member[0][1][2], member[0][1][3]])
-                distance = encoder.cal_encoder_dist(list_cmp, scatch)
-                dis_list.append([distance, index, member])
-
-    dis_list.sort(key=lambda x: x[0])
-    # now the idx_min labels the best matching.
-    print(len(dis_list))
-    i = 0
-    while i < 5 and i < len(dis_list):
-        dict_cur = dis_list[i][2]
-        # dict_cur -> an element of candidate
-        # dict_cur[0] -> starter, an element of candidate_start -> [cnt, player]
-        # dict_cur[0][0] -> cnt
-        data_rst.append([dis_list[i][1], dict_cur[0][0], dict_cur[1][0]])
-        i = i + 1
-    print(data_rst)
-
-    return data_rst
-
 
 def add_routes(app):
     @app.route('/')
@@ -268,13 +170,16 @@ def add_routes(app):
             print(alg)
             if alg == "\"dtw\"":
                 print("Choose dtw")
-                data_rst = dtw_policy()
+                # data_rst = dtw_policy()
+                data_rst = trajectory_template(0)
             elif alg == "\"encoder\"":
                 print("Choose encoder")
-                data_rst = encoder_policy()
+                # data_rst = encoder_policy()
+                data_rst = trajectory_template(1)
             else:
                 print("default")
-                data_rst = dtw_policy()
+                s = 'dtw'
+                data_rst = trajectory_template(0)
 
             return json.dumps({'status': 'success', 'data': data_rst})
         except Exception as _:
