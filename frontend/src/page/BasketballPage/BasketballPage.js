@@ -28,44 +28,7 @@ var store = window.localStorage
 
 
 function BasketballPage() {
-    const [Matching_Round,setMatching_Round] =useState('');
-
-    // Initial the Canvas
-    useEffect(() => {
-        
-        var canvas = document.getElementById('theCanvas');
-        canvas.setAttribute("width","1194");
-        canvas.setAttribute("height","672");
-        
-        
-        var context = canvas.getContext('2d');
-        var imageObj = new Image();
-        //var name = prompt("Enter the name of the file", "backdrop.jpg");
-
-  
-        imageObj.onload = function() {
-            
-        };
-        console.log("Initial")
-        console.log(canvas)
-             
-        }, []);
-
     
-    
-    const windowToCanvas = (canvas, x, y) => {
-        let rect = canvas.getBoundingClientRect()
-        
-        
-        return {
-                
-                x: x - rect.left * (canvas.width/rect.width),
-                y: y - rect.top * (canvas.height/rect.height)
-        }
-    }
-  
-    
-
 
     
     
@@ -87,7 +50,7 @@ function BasketballPage() {
          <Layout >
          
             <Sider>
-                <Sidebar Matching={Matching_Round}/>
+                <Sidebar />
                 
             </Sider> 
 
