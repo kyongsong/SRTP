@@ -1,0 +1,8 @@
+.card-header {
+    display: flex;
+    justify-content: center;
+  }
+  .card-title {
+    margin-top: 10px;
+    margin-bottom: 0;
+  }

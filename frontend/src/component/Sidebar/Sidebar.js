@@ -1,8 +1,10 @@
 import { RedoOutlined , SettingOutlined, SearchOutlined,DribbbleOutlined ,EditOutlined,ToolOutlined,DashOutlined ,UserOutlined   } from '@ant-design/icons';
 import { Menu, Drawer} from 'antd';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Wrapper from '../../assets/wrappers/SideBar.js';
 import RoundPlayList from '../RoundPlayLIst/RoundPlayList.js';
+import request from '../../utils/request.js';
+
 var storage=window.localStorage;
 function getItem(label, key, icon, children, type) {
   return {
@@ -35,9 +37,12 @@ const items = [
 
 // submenu keys of first level
 const rootSubmenuKeys = ['sub1'];
-const Sidebar = (props) => {
+const Sidebar = () => {
+
   
   const [open, setOpen] = useState(false);
+  const [MatchingStatus,setMathingStatus]=useState(false);
+  
   const showDrawer = () => {
     setOpen(true);
   };
@@ -54,7 +59,7 @@ const Sidebar = (props) => {
     }
   };
   const onLink = (key) => {
-    console.log(key.key)
+    
     if (key.key=='1'){
       window.location.href = "./"
     }
@@ -65,7 +70,11 @@ const Sidebar = (props) => {
       storage.setItem("ChoosingAlgorithm","encoder")
     }
     else if(key.key=='4'){
-      window.location.href="./Room"
+      
+      setScratchStatus(!ScratchStatus)
+   
+     
+      
     }
     else if(key.key=='5'){
       window.location.href="./Device"
@@ -129,6 +138,30 @@ const Sidebar = (props) => {
       console.log('reset2')
     }
     else if(key.key == '7'){
+      
+
+     
+        console.log(Trackdata)
+      
+      request.post('/Match', Trackdata).then(
+          res =>{
+              console.log(res)
+              console.log(res.data.data.length)
+          
+          if(res.data.data.length===0){
+            alert("匹配失败")
+          }else{
+              
+              setMatching_Round(res.data);
+              
+          }
+                      
+        
+          }
+        )
+  
+  
+      
       setOpen(true);
     }
     else {
@@ -141,6 +174,143 @@ const Sidebar = (props) => {
       'primary-color': '#1890ff',
   
   }
+  const [Matching_Round,setMatching_Round] =useState('');
+  const [ScratchStatus,setScratchStatus]=useState(false);
+  let Trackdata=[];
+
+    // Initial the Canvas
+    useEffect(() => {
+        
+        var canvas = document.getElementById('theCanvas');
+        canvas.setAttribute("width","1194");
+        canvas.setAttribute("height","672");
+        
+        
+        var context = canvas.getContext('2d');
+        var imageObj = new Image();
+        //var name = prompt("Enter the name of the file", "backdrop.jpg");
+
+  
+        imageObj.onload = function() {
+            
+        };
+        console.log("Initial")
+        console.log(canvas)
+             
+        }, []);
+
+    
+    
+    const windowToCanvas = (canvas, x, y) => {
+        let rect = canvas.getBoundingClientRect()
+        
+        
+        return {
+                
+                x: x - rect.left * (canvas.width/rect.width),
+                y: y - rect.top * (canvas.height/rect.height)
+        }
+    }
+  
+    
+
+  useEffect(() => {
+    let theCanvas = document.querySelector('#theCanvas')
+   
+   // if theCanvas is not exists or Environment does not support the Canvas
+   if (!theCanvas || !theCanvas.getContext) 
+   {
+   return false
+   } 
+   else {
+   let context = theCanvas.getContext('2d')
+   let isAllowDrawLine = false
+   
+   let MoveTrack=new Array();
+  
+   
+   
+
+    
+   
+    theCanvas.onmousedown = function(e) {
+      isAllowDrawLine = true
+      
+      let ele = windowToCanvas(theCanvas, e.clientX, e.clientY)
+      console.log("real "+ele.x,ele.y)
+
+      MoveTrack=new Array();
+      //mouse down
+      console.log(MatchingStatus)
+     
+      
+      let { x, y } = ele
+      let x1=(ele.x-7)/12.6
+      
+      if(x1<0) x1=0;
+      let y1=(ele.y-6)/13.26
+      console.log(y1)
+      if(y1<0) y1=0;
+      
+      MoveTrack.push({x1,y1})
+
+      context.moveTo(x, y)
+      console.log("init "+x1+" "+y1)
+    
+      theCanvas.onmousemove = (e) => {
+          if (isAllowDrawLine) {
+              let ele = windowToCanvas(theCanvas, e.clientX, e.clientY)
+              let { x, y } = ele
+              let x1=(ele.x-7)/12.6
+              
+              if(x1<0) x1=0;
+              let y1=(ele.y-6)/13.26
+              console.log(y1)
+              if(y1<0) y1=0;
+              console.log("Move "+x1+" "+y1)
+              
+              MoveTrack.push({x1,y1})
+              context.lineTo(x, y)
+              context.stroke()
+              //<!-- console.log("mouse move"+x+" "+y) -->
+             
+          }
+      }
+  }
+    theCanvas.onmouseup = function() {
+        isAllowDrawLine = false
+        let input=new Array(JSON.stringify(MoveTrack));
+        
+        var Choosing;
+        if(storage.getItem("ChoosingAlgorithm")==null){
+            Choosing="dtw"
+        }
+        else{
+            Choosing=storage.getItem("ChoosingAlgorithm")
+        }
+        var ChoosingAlgorithm=JSON.stringify(Choosing)
+        
+        let data=new Array({"MoveTrack":input,"ChoosingAlgorithm":ChoosingAlgorithm})
+        Trackdata.push(data)
+        // console.log(data)
+        // console.log(Trackdata)
+      
+        // console.log(MatchingStatus)
+      
+      //  MoveTrack=new Array();
+    
+  }
+   }
+  
+  
+   
+   
+   
+
+   
+   
+        
+   }, [ScratchStatus]);
   return (
 
       <div>
@@ -162,7 +332,7 @@ const Sidebar = (props) => {
           onClick={onLink}
         />
         <Drawer title="Matching Round" placement="right" onClose={onClose} open={open} headerStyle={{backgroundColor: '#00474f' ,fontSize:20 } } bodyStyle={{backgroundColor:'#006d75'}}>
-          <RoundPlayList Matching={props}/>
+          <RoundPlayList Matching={Matching_Round}/>
       </Drawer>
       </div>
      

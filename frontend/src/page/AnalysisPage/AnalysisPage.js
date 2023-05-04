@@ -42,18 +42,18 @@ function AnalysisPage(){
        
         <Layout >
 
-        <Header1/>
+        <Header1/> 
 
        
          <Layout >
          
             <Sider>
-                <Sidebar />
+                 <Sidebar /> 
                 
             </Sider> 
 
             <Content style={{backgroundColor:'#006d75'}}>
-                        <ScoreBoard/>
+                        <ScoreBoard/> 
                         
                         <HeatMap />
                         <CriticalData/>

@@ -6,6 +6,7 @@
     "@ant-design/pro-field": "^1.34.10",
     "@ant-design/pro-table": "^2.80.8",
     "@ant-design/pro-utils": "^1.41.4",
+    "@antv/g2plot": "^2.4.29",
     "@babel/runtime": "^7.18.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",

@@ -5,24 +5,24 @@ import React from "react";
 function RoundPlayList  (props) {
   // console.log("RoundPlayList "+props.Matching.Matching.data.length)
   // console.log("RoundPlayList "+props.Matching.Matching)
+  console.log(props.Matching)
   
-  console.log(props.Matching.Matching==="")
 
   useEffect(() => {
     var CardList=document.getElementById("List")
-    if(props.Matching.Matching===""){
+    if(props.Matching===""){
       alert("No Result")
     }
     else{
       console.log("Here")
       //We could get the Canvas First and the First Clip for the Matching Round And Script it.
       const roundCards = [];
-      for(var i=0;i<props.Matching.Matching.data.length;i++)
+      for(var i=0;i<props.Matching.data.length;i++)
       {
         
-          var RoundCard=React.createElement(Roundcard,{round:props.Matching.Matching.data[i][0],
-          start_index:props.Matching.Matching.data[i][1],
-          end_index:props.Matching.Matching.data[i][2],
+          var RoundCard=React.createElement(Roundcard,{round:props.Matching.data[i][0],
+          start_index:props.Matching.data[i][1],
+          end_index:props.Matching.data[i][2],
           events:"Attacking",
           player_Name:"Curry",
           AgainstTeam:"Lakers",

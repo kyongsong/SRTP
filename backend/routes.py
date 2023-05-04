@@ -264,6 +264,7 @@ def add_routes(app):
         #         {round, start frame number, end frame number, team_id, player_id}
         # """
         try:
+            print(flask.request.json)
             alg = flask.request.json.get("ChoosingAlgorithm")
             print(alg)
             if alg == "\"dtw\"":
