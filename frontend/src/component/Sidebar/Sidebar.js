@@ -137,7 +137,7 @@ const Sidebar = () => {
        canvas.width=canvas.width;
       console.log('reset2')
     }
-    else if(key.key == '7'){
+    else if(key.key == '8'){
       
 
      
@@ -310,7 +310,7 @@ const Sidebar = () => {
    
    
         
-   }, [ScratchStatus]);
+   }, [Trackdata]);
   return (
 
       <div>
