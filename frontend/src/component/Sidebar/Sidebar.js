@@ -1,5 +1,5 @@
 import { RedoOutlined , SettingOutlined, SearchOutlined,DribbbleOutlined ,EditOutlined,ToolOutlined,DashOutlined ,UserOutlined   } from '@ant-design/icons';
-import { Menu, Drawer} from 'antd';
+import { Menu, Drawer, Input} from 'antd';
 import React, { useState,useEffect } from 'react';
 import Wrapper from '../../assets/wrappers/SideBar.js';
 import RoundPlayList from '../RoundPlayLIst/RoundPlayList.js';
@@ -177,6 +177,7 @@ const Sidebar = () => {
   const [Matching_Round,setMatching_Round] =useState('');
   const [ScratchStatus,setScratchStatus]=useState(false);
   let Trackdata=[];
+  let InputTrack=[];
 
     // Initial the Canvas
     useEffect(() => {
@@ -280,6 +281,7 @@ const Sidebar = () => {
     theCanvas.onmouseup = function() {
         isAllowDrawLine = false
         let input=new Array(JSON.stringify(MoveTrack));
+       
         
         var Choosing;
         if(storage.getItem("ChoosingAlgorithm")==null){
@@ -291,7 +293,19 @@ const Sidebar = () => {
         var ChoosingAlgorithm=JSON.stringify(Choosing)
         
         let data=new Array({"MoveTrack":input,"ChoosingAlgorithm":ChoosingAlgorithm})
+        let data1=new Array([input])
+      
+         
+
+        
         Trackdata.push(data)
+        InputTrack.push(data1)
+        
+       const Data=JSON.stringify(InputTrack)  
+        
+        storage.setItem("InputTrack",Data);
+        
+        
         // console.log(data)
         // console.log(Trackdata)
       

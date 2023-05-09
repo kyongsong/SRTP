@@ -26,6 +26,52 @@
 
 ### 1.2.1 前后端交互数据格式-JSON
 
++ @app.route("/ShotsMap", methods=['POST'])
+
+  + 提交格式
+
+    ```
+    {
+    'current_round':x
+    }
+    ```
+
+    current_round当前的匹配回合
+
+  + 返回格式
+
+    ```
+    {
+    ‘shot_sucess‘:
+    	{[x,y],[x,y]....},
+    'shot_failed':{
+    	{[x,y],[x,y].....}
+    	}
+    }
+    ```
+
+    返回当前回合附近的近十个回合的出手位置
+
++ @app.route("/ShotsHeatMap", methods=['POST'])
+
+  + 提交格式
+
+    ```
+    {
+    'current_round':x
+    }
+    ```
+
+    
+
+  + 返回格式
+
+    ```
+    {[x,y],[x,y]....}
+    ```
+
+    
+
 + @app.route("/Match", methods=['POST'])
 
   + 提交格式

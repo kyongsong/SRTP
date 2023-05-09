@@ -56,11 +56,10 @@ function AnalysisPage(){
           
 
             <Content style={{backgroundColor:'#006d75'}}>
-                        <ScoreBoard/> 
+                       
                         
                        
-                        <CriticalData />
-                        <ScoreMap/>
+                       
                         <HeatMap  />
                         
                         
