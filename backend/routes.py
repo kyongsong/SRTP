@@ -155,16 +155,16 @@ def multiple_matching(multiple_track):
         alg = multiple_track[i][0]['ChoosingAlgorithm']
         if alg == "\"dtw\"":
             print("Choose dtw")
-            data_rst = trajectory_template(0, multiple_track[i][0], 10, 2, False)
+            data_rst = trajectory_template(0, multiple_track[i][0], 15, 2, False)
         elif alg == "\"encoder\"":
             print("Choose encoder")
-            data_rst = trajectory_template(1, multiple_track[i][0], 10, 2, False)
+            data_rst = trajectory_template(1, multiple_track[i][0], 15, 2, False)
         elif alg == "\"graphic_features\"":
             print("Choose graphic_features")
-            data_rst = trajectory_template(2, multiple_track[i][0], 10, 2, False)
+            data_rst = trajectory_template(2, multiple_track[i][0], 15, 2, False)
         else:
             print("default as dtw")
-            data_rst = trajectory_template(0, multiple_track[i][0], 10, 2, False)
+            data_rst = trajectory_template(0, multiple_track[i][0], 15, 2, False)
         # now we need to regroup the list by data_rst[i][0] -> the round number
         # the structure of the grouping is as follows:
         #   mapping:
@@ -326,6 +326,47 @@ def add_routes(app):
                 mvment.append(item)
 
             return {'message': 'success!', 'movement': mvment, 'metadata': metadata, 'size': len(mvment)}
+
+        except Exception as _:
+            print(_)
+            return json.dumps({'message': 'failed'})
+
+    @app.route("/ShotsMap", methods=['POST'])
+    def shot_map() -> str:
+        try:
+            round_ = flask.request.get_json()
+            current_round = int(round_["current_round"])
+            print("check type", type(current_round), current_round)
+            if current_round >= 19:
+                start_round = current_round - 19
+            else:
+                start_round = 0
+
+            shot_pos = []
+            index = start_round
+            while index <= current_round:
+                is_shoot_round = False
+                with open(os.path.join('0021500001', str(index), 'metadata.json'), 'r') as f_meta:
+                    metadata = json.load(f_meta)
+                    event_result = str(metadata["event_result"])
+                    if event_result.find("shot"):
+                        is_shoot_round = True
+                if is_shoot_round:
+                    with open(os.path.join(game_name, str(index), 'movement_refined_shot_clock.json'), 'r') as f_data:
+                        mvment = json.load(f_data)  # mvment is filled with the refined data of current round
+                        cnt = metadata['possession_start_index']
+                        # frame: frame of round
+                        for frame in mvment:
+                            if str(frame["ball_status"]) == "shot":
+                                shot_pos.append([frame["ball_position"][0], frame["ball_position"][1]])
+                                break
+                            cnt = cnt + 1  # cnt = frame_id
+                            if cnt > metadata['possession_end_index']:
+                                break
+                index = index + 1
+            print(shot_pos)
+            return json.dumps(shot_pos)
+
 
         except Exception as _:
             print(_)

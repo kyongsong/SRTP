@@ -165,7 +165,6 @@ const Sidebar = () => {
       setOpen(true);
     }
     else {
-      
       window.location.href="./Analysis"
     }
   };
