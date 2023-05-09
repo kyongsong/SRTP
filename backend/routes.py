@@ -1,11 +1,11 @@
-from typing import Dict, Any, List
+import json
+import os
+from typing import Any
 
 import flask
-import os
-import json
-import numpy as np
 from fastdtw import fastdtw
-from flask import Flask, request, render_template, jsonify, Response
+from flask import jsonify, Response
+
 import dtw
 import encoder
 import graphic_features
@@ -199,6 +199,61 @@ def multiple_matching(multiple_track):
     print(data_rst)
     return data_rst
 
+def visual_info(data_rst):
+    res = {}
+    events = []
+    player_Name = []
+    AgainstTeam = []
+    player_mapping = {}
+    with open(os.path.join(game_name, '0', 'metadata.json'), 'r') as meta_check:
+        metadata_check = json.load(meta_check)  # metadata of current round
+        for home_players in metadata_check["home"]["players"]:
+            player_mapping[home_players["playerid"]] = home_players["firstname"] + ' ' + home_players["lastname"]
+        for visit_players in metadata_check["visitor"]["players"]:
+            player_mapping[visit_players["playerid"]] = visit_players["firstname"] + ' ' + visit_players["lastname"]
+    # here the players involved are too many, we only get the first event player as the player showed on the card.
+    for result in data_rst:
+        with open(os.path.join(game_name, str(result[0]), 'metadata.json'), 'r') as meta_f:
+            metadata = json.load(meta_f)  # metadata of current round
+            with open(os.path.join(game_name, str(result[0]), 'movement_refined_shot_clock.json'), 'r') as f:
+                mvment = json.load(f)
+                start_frame = mvment[result[1]] # get the start frame's json file
+                event_player_num = start_frame["event_player"]
+                print(type(event_player_num))
+                print(event_player_num)
+                print(player_mapping[event_player_num])
+
+                offense_team = metadata["offensive_team"]
+                visitor_name = metadata["visitor"]["name"]
+                home_name = metadata["home"]["name"]
+                print(home_name)
+                print(visitor_name)
+                print(offense_team)
+                if offense_team == "visitor":
+                    print("visitor checked")
+                    AgainstTeam.append(visitor_name)
+                    print(AgainstTeam)
+                    events.append(home_name + "attacking on Round " + str(metadata["event_id"]))
+                    print(events)
+                    player_Name.append(player_mapping[event_player_num])
+                    print(player_Name)
+                else :
+                    print("home checked")
+                    AgainstTeam.append(home_name)
+                    print(AgainstTeam)
+                    events.append(visitor_name + "attacking on Round " + str(metadata["event_id"]))
+                    print(events)
+                    player_Name.append(player_mapping[event_player_num])
+                    print(player_Name)
+    res['events'] = events
+    res['player_Name'] = player_Name
+    res['AgainstTeam'] = AgainstTeam
+
+    print(res)
+
+    return res
+
+
 def alignment(multiple_track):
     # still hesitating whether implementation of this alignment can be done with in time
     # for now, do nothing
@@ -232,7 +287,6 @@ def add_routes(app):
         #         {round, start frame number, end frame number, team_id, player_id}
         # """
         try:
-            
             track_multi = flask.request.get_json()
             print(track_multi)
             size_track = len(track_multi)
@@ -259,14 +313,17 @@ def add_routes(app):
                 else:
                     print("default as dtw")
                     data_rst = trajectory_template(0, json_data, 2, 0.5, True)
-                return json.dumps({'status': 'success', 'data': data_rst})
+                info = visual_info(data_rst)
+                print(json.dumps({'status': 'success', 'data': data_rst, 'events': info['events'], 'player_Name': info['player_Name'], 'AgainstTeam': info['AgainstTeam']}))
+                return json.dumps({'status': 'success', 'data': data_rst, 'events': info['events'], 'player_Name': info['player_Name'], 'AgainstTeam': info['AgainstTeam']})
             elif size_track == 0:
                 print("watching the result of matching")
                 return json.dumps({'status': 'success'})
             else :
                 # now do the multiple trajectories matching
                 multiple_rst = multiple_matching(track_multi)
-                return json.dumps({'status': 'success', 'data': multiple_rst})
+                info = visual_info(data_rst)
+                return json.dumps({'status': 'success', 'data': multiple_rst, 'events': info['events'], 'player_Name': info['player_Name'], 'AgainstTeam': info['AgainstTeam']})
 
         except Exception as _:
             print(_)

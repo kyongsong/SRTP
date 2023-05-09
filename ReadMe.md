@@ -132,7 +132,11 @@
   }
   ```
 
+  修改后的格式样例
   
+  ```
+  {"status": "success", "data": [["65", 51, 149], ["15", 54, 123]], "events": ["Atlanta Hawksattacking on Round 65", "Atlanta Hawksattacking on Round 15"], "player_Name": ["Steve Blake", "Reggie Jackson"], "AgainstTeam": ["Detroit Pistons", "Detroit Pistons"]}
+  ```
 
 ### 1.2.2 有关转换坐标的问题
 
