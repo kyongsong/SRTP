@@ -59,17 +59,15 @@
     ```
     {
     'current_round':x
-    }
+    }xq
     ```
-
-    
 
   + 返回格式
 
     ```
-    {[x,y],[x,y]....}
+    {'shot_position':[[x,y],[x,y]....]}
     ```
-
+  
 + @app.route("/PassMatrix", methods=['POST'])
 
   + 提交格式

@@ -388,8 +388,8 @@ def add_routes(app):
             print(_)
             return json.dumps({'message': 'failed'})
 
-    @app.route("/ShotsMap", methods=['POST'])
-    def shot_map() -> str:
+    @app.route("/ShotsHeatMap", methods=['POST'])
+    def shot_heat_map() -> str:
         try:
             round_ = flask.request.get_json()
             current_round = int(round_["current_round"])
@@ -422,7 +422,7 @@ def add_routes(app):
                                 break
                 index = index + 1
             print(shot_pos)
-            return json.dumps(shot_pos)
+            return json.dumps({"shot_postion": shot_pos})
 
 
         except Exception as _:
