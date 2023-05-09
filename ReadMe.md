@@ -208,6 +208,63 @@
   + 点击跳转的页面-需要完成点击窗户收回
   + 后续可添加预览图
 + PlayProgressBar 完成
++ 绘制PassMatrix
+
+  ```
+  要在SVG中绘制一个带有13x13矩阵表格的矩阵，您可以使用SVG的rect元素来创建小正方形，并使用循环来创建多个小正方形，并根据数值设置每个小正方形的颜色。以下是一个示例SVG代码，它创建了一个13x13矩阵表格，每个小正方形根据其值被渲染为不同的颜色：
+  
+  <svg width="500" height="500" viewBox="0 0 500 500">
+    <!-- 绘制网格线 -->
+    <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
+    <rect x="50" y="50" width="400" height="400" fill="#F0F0F0" />
+    <g>
+      <!-- 绘制矩阵内容 -->
+      <text x="10" y="30" font-size="12" fill="#000">球员</text>
+      <text x="30" y="30" font-size="12" fill="#000">位置</text>
+      <text x="50" y="30" font-size="12" fill="#000">1</text>
+      <text x="160" y="30" font-size="12" fill="#000">13</text>
+      <text x="5" y="60" font-size="12" fill="#000">1</text>
+      <text x="5" y="170" font-size="12" fill="#000">13</text>
+      <!-- 循环绘制小正方形 -->
+      <g>
+        <!-- 13x13小正方形表格内容 -->
+        <rect x="50" y="50" width="30" height="30" fill="#d9efff" stroke="#000000" />
+        <text x="65" y="70" fill="#000" font-size="10">球员1</text>
+        <text x="55" y="80" fill="#000" font-size="10">位置1</text>
+        <text x="55" y="90" fill="#000" font-size="10">5</text>
+      </g>
+      <!-- 内部循环 -->
+      <g transform="translate(0, 30)">
+        <!-- 13x13小正方形表格内容 -->
+        <rect x="50" y="50" width="30" height="30" fill="#a7ea7f" stroke="#000000" />
+        <text x="65" y="70" fill="#000" font-size="10">球员2</text>
+        <text x="55" y="80" fill="#000" font-size="10">位置2</text>
+        <text x="55" y="90" fill="#000" font-size="10">10</text>
+      </g>
+      <!-- 循环结束 -->
+    </g>
+    <!-- 绘制图例内容 -->
+    <g>
+      <rect x="50" y="450" width="20" height="20" fill="#d9efff" stroke="#000000" />
+      <text x="80" y="465" fill="#000" font-size="10">数值最小</text>
+    </g>
+    <g>
+      <rect x="150" y="450" width="20" height="20" fill="#a7ea7f" stroke="#000000" />
+      <text x="180" y="465" fill="#000" font-size="10">数值较小</text>
+    </g>
+    <g>
+      <rect x="250" y="450" width="20" height="20" fill="#61c750" stroke="#000000" />
+      <text x="280" y="465" fill="#000" font-size="10">数值中等</text>
+    </g>
+    <g>
+      <rect x="350" y="450" width="20" height="20" fill="#004F33" stroke="#000000" />
+      <text x="380" y="465" fill="#000" font-size="10">数值最大</text>
+    </g>
+  </svg>
+  在上面的示例中，我们使用了text元素来创建表格的标题、行名、列名和图例，使用了rect元素来创建矩形背景和小正方形、使用fill属性设置小正方形的填充色，根据不同的值设置了不
+  ```
+
+  
 
 #### 2.后端
 

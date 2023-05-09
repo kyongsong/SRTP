@@ -38,7 +38,7 @@ function RoundCard(props){
               content: 'Loaded!',
               duration: 2,
             });
-          }, 1000);
+          }, 200);
           var store = window.localStorage
           store.setItem("event_id",props.round)
           store.setItem("start_index",props.start_index)

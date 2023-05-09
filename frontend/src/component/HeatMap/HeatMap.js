@@ -15,7 +15,65 @@ function HeatMap(){
  
   
    useEffect(()=>{
-    var PeriodData={'Period':1};
+    var PeriodData={'current_round':1};
+    request.post('/ShotsMap', PeriodData).then(
+      res =>{
+        var x = [], y = [],status=[];
+        for(var i=0;i<res.data.shot_sucess.length;i++){
+          //读取后端数据
+          
+          //转换坐标
+          x.push(res.data[i][0]*12.7)
+          y.push(res.data[i][1].y*13.44)
+          status.push("success");
+
+        }
+        for(var i=0;i<res.data.shot_failed.length;i++){
+          //读取后端数据
+          
+          //转换坐标
+          x.push(res.data[i][0]*12.7)
+          y.push(res.data[i][1].y*13.44)
+          status.push("failed");
+
+        }
+       
+        //绘制热点图
+     
+        for (var i = 0; i < res.data.shot_sucess.length+res.data.shot_failed.length; i++) {
+            var size = 20;
+            var cx = x[i];
+            var cy = y[i] ;
+        
+            if (status[i]=="success") {
+              var color = "rgba(255, 0, 0, "   + ")";
+              
+              var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+              circle.setAttribute("cx", cx);
+              circle.setAttribute("cy", cy);
+              circle.setAttribute("r", size);
+              circle.setAttribute("fill", color);
+           
+              
+            }
+            else{
+              var color = "rgba(0, 0, 255)";
+              
+              var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+              circle.setAttribute("cx", cx);
+              circle.setAttribute("cy", cy);
+              circle.setAttribute("r", size);
+              circle.setAttribute("fill", color);
+               document.getElementById("ShotMap").appendChild(circle);
+
+            }
+          
+        }
+
+
+      })
+
+
     request.post('/ShotsHeatMap', PeriodData).then(
       res =>{
           console.log(res)
@@ -109,7 +167,7 @@ function HeatMap(){
       polyline.setAttribute("fill", "none");
       
       // 将polyline元素添加到SVG中
-      const svg = document.getElementById("hotspots");
+      const svg = document.getElementById("scratch");
       svg.appendChild(polyline);
       
       
@@ -153,7 +211,7 @@ function HeatMap(){
     
     
        
-            <Tabs.TabPane tab="1ST  " key="1" centered={true} >
+            <Tabs.TabPane tab="ShotsHeatMap  " key="1" centered={true} >
             <Row>
                 <Col span={8} offset={0}>
                   <img src={AtlantaHawks}/>
@@ -186,11 +244,20 @@ function HeatMap(){
                 
                 </Col> 
             </Row>
-            
+            <div className='HeatMap'>
+              <svg  width="1200" height="677" > 
+                  <image id="mys"xlinkHref={BasketballBg} width="1200" height="677" />
+                  <g>
+                  <rect x="0" y="0" width="1200" height="677" fill="none" pointerEvents="all" />
+                  <g id="scratch"></g>
+                  <g id="hotspots"></g>
+                  </g>
+              </svg >  
+           </div> 
             </Tabs.TabPane>
     
     
-           <Tabs.TabPane tab="2ST  " key="2">
+           <Tabs.TabPane tab="ShotMap  " key="2">
            <Row>
                 <Col span={8}>
                   <img src={AtlantaHawks}/>
@@ -222,11 +289,21 @@ function HeatMap(){
                   
                 
                 </Col> 
+                <div className='HeatMap'>
+              <svg  width="1200" height="677" > 
+                  <image id="mys"xlinkHref={BasketballBg} width="1200" height="677" />
+                  <g>
+                  <rect x="0" y="0" width="1200" height="677" fill="none" pointerEvents="all" />
+                  <g id="scratch"></g>
+                  <g id="ShotMap"></g>
+                  </g>
+              </svg >  
+           </div> 
             </Row>
               
             </Tabs.TabPane>
        
-           <Tabs.TabPane tab="3ST  " key="3">
+           <Tabs.TabPane tab="Pass Matrix  " key="3">
            <Row>
                 <Col span={8}>
                   <img src={AtlantaHawks}/>
@@ -259,9 +336,58 @@ function HeatMap(){
                 
                 </Col> 
             </Row>
+            <div className='HeatMap'>
+            <svg width="500" height="500" viewBox="0 0 500 500">
+
+  <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
+  <rect x="50" y="50" width="400" height="400" fill="#F0F0F0" />
+  <g>
+   
+    <text x="10" y="30" font-size="12" fill="#000">球员</text>
+    <text x="30" y="30" font-size="12" fill="#000">位置</text>
+    <text x="50" y="30" font-size="12" fill="#000">1</text>
+    <text x="160" y="30" font-size="12" fill="#000">13</text>
+    <text x="5" y="60" font-size="12" fill="#000">1</text>
+    <text x="5" y="170" font-size="12" fill="#000">13</text>
+   
+    <g>
+    
+      <rect x="50" y="50" width="30" height="30" fill="#d9efff" stroke="#000000" />
+      <text x="65" y="70" fill="#000" font-size="10">球员1</text>
+      <text x="55" y="80" fill="#000" font-size="10">位置1</text>
+      <text x="55" y="90" fill="#000" font-size="10">5</text>
+    </g>
+  
+    <g transform="translate(0, 30)">
+     <rect x="50" y="50" width="30" height="30" fill="#a7ea7f" stroke="#000000" />
+      <text x="65" y="70" fill="#000" font-size="10">球员2</text>
+      <text x="55" y="80" fill="#000" font-size="10">位置2</text>
+      <text x="55" y="90" fill="#000" font-size="10">10</text>
+    </g>
+
+  </g>
+
+  <g>
+    <rect x="50" y="450" width="20" height="20" fill="#d9efff" stroke="#000000" />
+    <text x="80" y="465" fill="#000" font-size="10">数值最小</text>
+  </g>
+  <g>
+    <rect x="150" y="450" width="20" height="20" fill="#a7ea7f" stroke="#000000" />
+    <text x="180" y="465" fill="#000" font-size="10">数值较小</text>
+  </g>
+  <g>
+    <rect x="250" y="450" width="20" height="20" fill="#61c750" stroke="#000000" />
+    <text x="280" y="465" fill="#000" font-size="10">数值中等</text>
+  </g>
+  <g>
+    <rect x="350" y="450" width="20" height="20" fill="#004F33" stroke="#000000" />
+    <text x="380" y="465" fill="#000" font-size="10">数值最大</text>
+  </g>
+</svg>
+              </div>
            </Tabs.TabPane>
        
-          <Tabs.TabPane tab="4ST  " key="4">
+          <Tabs.TabPane tab="Pass Graph  " key="4">
           <Row>
                 <Col span={8}>
                   <img src={AtlantaHawks}/>
@@ -296,7 +422,7 @@ function HeatMap(){
             </Row>
           </Tabs.TabPane>
     
-          <Tabs.TabPane tab="All Ground" key="5">
+          <Tabs.TabPane tab="LineUp" key="5">
           <Row>
                 <Col span={8}>
                   <img src={AtlantaHawks}/>
@@ -335,15 +461,7 @@ function HeatMap(){
            
           
     
-           <div className='HeatMap'>
-              <svg  width="1200" height="677" > 
-                  <image id="mys"xlinkHref={BasketballBg} width="1200" height="677" />
-                  <g>
-                  <rect x="0" y="0" width="1200" height="677" fill="none" pointerEvents="all" />
-                  <g id="hotspots"></g>
-                  </g>
-              </svg >  
-           </div> 
+          
           </Space>
    
        </Card>
