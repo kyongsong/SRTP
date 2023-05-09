@@ -69,12 +69,12 @@ function RoundCard(props){
        <img src={BasketballBg} style={{width:"40%",position:"absolute",left:0,top:0}}></img>
        <Space style={{position:'absolute',left:140,top:10}}>
             <IconText icon={UserOutlined} text={props.player_Name} key="list-vertical-star-o" />
-            <Divider type="vertical" />
+             <Divider type="vertical" /> 
        </Space>
       
-       <Space style={{position:'absolute',left:220,top:10}}>
+       <Space style={{position:'absolute',left:280,top:10}}>
             <IconText icon={ClockCircleFilled} text={props.round} key="list-vertical-star-o" />   
-            <Divider type="vertical" />
+             
        </Space>
        
        <Space style={{position:'absolute',left:140,top:40}}>

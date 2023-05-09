@@ -151,7 +151,8 @@ const Sidebar = () => {
           if(res.data.data.length===0){
             alert("匹配失败")
           }else{
-              
+              console.log("匹配成功")
+              console.log(res.data)
               setMatching_Round(res.data);
               
           }

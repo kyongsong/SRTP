@@ -16,6 +16,7 @@ function RoundPlayList  (props) {
     }
     else{
       console.log("Here")
+      
       //We could get the Canvas First and the First Clip for the Matching Round And Script it.
       const roundCards = [];
       for(var i=0;i<props.Matching.data.length;i++)
@@ -24,9 +25,9 @@ function RoundPlayList  (props) {
           var RoundCard=React.createElement(Roundcard,{round:props.Matching.data[i][0],
           start_index:props.Matching.data[i][1],
           end_index:props.Matching.data[i][2],
-          events:"Attacking",
-          player_Name:"Curry",
-          AgainstTeam:"Lakers",
+          events:props.Matching.events[i],
+          player_Name:props.Matching.player_Name[i],
+          AgainstTeam:props.Matching.AgainstTeam[i],
           key:i
           });
           

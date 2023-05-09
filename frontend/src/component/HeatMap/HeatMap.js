@@ -15,86 +15,87 @@ function HeatMap(){
  
   
    useEffect(()=>{
-    var PeriodData={'current_round':1};
-    request.post('/ShotsMap', PeriodData).then(
-      res =>{
-        var x = [], y = [],status=[];
-        for(var i=0;i<res.data.shot_sucess.length;i++){
-          //读取后端数据
+    var PeriodData={'current_round':50};
+    // request.post('/ShotsMap', PeriodData).then(
+    //   res =>{
+    //     var x = [], y = [],status=[];
+    //     for(var i=0;i<res.data.shot_sucess.length;i++){
+    //       //读取后端数据
           
-          //转换坐标
-          x.push(res.data[i][0]*12.7)
-          y.push(res.data[i][1].y*13.44)
-          status.push("success");
+    //       //转换坐标
+    //       x.push(res.data[i][0]*12.7)
+    //       y.push(res.data[i][1].y*13.44)
+    //       status.push("success");
 
-        }
-        for(var i=0;i<res.data.shot_failed.length;i++){
-          //读取后端数据
+    //     }
+    //     for(var i=0;i<res.data.shot_failed.length;i++){
+    //       //读取后端数据
           
-          //转换坐标
-          x.push(res.data[i][0]*12.7)
-          y.push(res.data[i][1].y*13.44)
-          status.push("failed");
+    //       //转换坐标
+    //       x.push(res.data[i][0]*12.7)
+    //       y.push(res.data[i][1].y*13.44)
+    //       status.push("failed");
 
-        }
+    //     }
        
-        //绘制热点图
+    //     //绘制热点图
      
-        for (var i = 0; i < res.data.shot_sucess.length+res.data.shot_failed.length; i++) {
-            var size = 20;
-            var cx = x[i];
-            var cy = y[i] ;
+    //     for (var i = 0; i < res.data.shot_sucess.length+res.data.shot_failed.length; i++) {
+    //         var size = 20;
+    //         var cx = x[i];
+    //         var cy = y[i] ;
         
-            if (status[i]=="success") {
-              var color = "rgba(255, 0, 0, "   + ")";
+    //         if (status[i]=="success") {
+    //           var color = "rgba(255, 0, 0, "   + ")";
               
-              var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-              circle.setAttribute("cx", cx);
-              circle.setAttribute("cy", cy);
-              circle.setAttribute("r", size);
-              circle.setAttribute("fill", color);
+    //           var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    //           circle.setAttribute("cx", cx);
+    //           circle.setAttribute("cy", cy);
+    //           circle.setAttribute("r", size);
+    //           circle.setAttribute("fill", color);
            
               
-            }
-            else{
-              var color = "rgba(0, 0, 255)";
+    //         }
+    //         else{
+    //           var color = "rgba(0, 0, 255)";
               
-              var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-              circle.setAttribute("cx", cx);
-              circle.setAttribute("cy", cy);
-              circle.setAttribute("r", size);
-              circle.setAttribute("fill", color);
-               document.getElementById("ShotMap").appendChild(circle);
+    //           var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    //           circle.setAttribute("cx", cx);
+    //           circle.setAttribute("cy", cy);
+    //           circle.setAttribute("r", size);
+    //           circle.setAttribute("fill", color);
+    //            document.getElementById("ShotMap").appendChild(circle);
 
-            }
+    //         }
           
-        }
+    //     }
 
 
-      })
+    //   })
 
 
     request.post('/ShotsHeatMap', PeriodData).then(
       res =>{
           console.log(res)
-          console.log(res.data.length)
+          console.log(res.data.shot_postion)
       
       if(res.data.length===0){
         alert("获取失败")
       }else{
           var x = [], y = [];
-          for(var i=0;i<res.data.length;i++){
+          for(var i=0;i<res.data.shot_postion.length;i++){
             //读取后端数据
 
             //转换坐标
-            x.push(res.data[i][0]*12.7)
-            y.push(res.data[i][1].y*13.44)
-
+            x.push(res.data.shot_postion[i][0]*12.7)
+            y.push(res.data.shot_postion[i][1]*13.44)
+            
           }
+        
           // 计算投篮数据的热点图
           var bins = 20;
           var heatmap = new Array(bins).fill(0).map(() => new Array(bins).fill(0));
-          for (var i = 0; i < 100; i++) {
+          for (var i = 0; i<res.data.shot_postion.length; i++) {
             var bin_x = Math.floor(x[i] / (1200 / bins));
             var bin_y = Math.floor(y[i] / (677 / bins));
             heatmap[bin_x][bin_y]++;
@@ -106,7 +107,7 @@ function HeatMap(){
               var value = heatmap[i][j];
               if (value > 0) {
                 var color = "rgba(255, 0, 0, " + (value / max) + ")";
-                var size = 2 + (value / max) * 4;
+                var size = 15 + (value / max) * 4;
                 var cx = (i + 0.5) * (1200 / bins);
                 var cy = (j + 2.5) * (677 / bins);
                 var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
