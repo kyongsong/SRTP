@@ -17,13 +17,12 @@ index_value = 0
 # 比赛名称
 game_name = '0021500001'
 
-def trajectory_template(search_method):
+def trajectory_template(search_method, front_data, intended_rst_num, stride, single_search):
     # 1 处理从前端获取的轨迹信息，将其存储在scatch_track中
-    scatch_track = flask.request.json.get("MoveTrack")
+    scatch_track = front_data['MoveTrack']
     print(scatch_track)
-    scatch1 = json.loads(scatch_track)
+    scatch1 = json.loads(scatch_track[0])
     scatch = []
-    index = 0
     for i in scatch1:
         index = 0
         x = 0
@@ -41,9 +40,8 @@ def trajectory_template(search_method):
     game = os.listdir(game_name)  # info of one game
     data_rst = []
     threshold = 1
-    dis_list = []  # final answer trace list
 
-    while len(data_rst) < 2:
+    while len(data_rst) < intended_rst_num:
         data_rst = []
         dis_list = []
         for index in game:  # index: an index represents a round in the game
@@ -123,21 +121,89 @@ def trajectory_template(search_method):
 
         dis_list.sort(key=lambda x: x[0])
         # now the idx_min labels the best matching.
-        print(len(dis_list))
+        print('dis_list legnth is: ' + str(len(dis_list)))
+        print('threshold is: ' + str(threshold))
         i = 0
-        while i < 5 and i < len(dis_list):
-            dict_cur = dis_list[i][2]
-            # dict_cur -> an element of candidate
-            # dict_cur[0] -> starter, an element of candidate_start -> [cnt, player]
-            # dict_cur[0][0] -> cnt
-            data_rst.append([dis_list[i][1], dict_cur[0][0], dict_cur[1][0]])
-            i = i + 1
-        threshold = threshold + 0.5
+        if single_search:
+            while i < 5 and i < len(dis_list):
+                dict_cur = dis_list[i][2]
+                # dict_cur -> an element of candidate
+                # dict_cur[0] -> starter, an element of candidate_start -> [cnt, player]
+                # dict_cur[0][0] -> cnt
+                data_rst.append([dis_list[i][1], dict_cur[0][0], dict_cur[1][0]])
+                i = i + 1
+        else :
+            while i < len(dis_list):
+                dict_cur = dis_list[i][2]
+                # dict_cur -> an element of candidate
+                # dict_cur[0] -> starter, an element of candidate_start -> [cnt, player]
+                # dict_cur[0][0] -> cnt
+                data_rst.append([dis_list[i][1], dict_cur[0][0], dict_cur[1][0]])
+                i = i + 1
+        threshold = threshold + stride
 
     print(data_rst)
     print(threshold)
 
     return data_rst
+
+def multiple_matching(multiple_track):
+    size_tracks = len(multiple_track)
+    i = 0
+    mapping = {}
+    while i < size_tracks:
+        alg = multiple_track[i][0]['ChoosingAlgorithm']
+        if alg == "\"dtw\"":
+            print("Choose dtw")
+            data_rst = trajectory_template(0, multiple_track[i][0], 10, 2, False)
+        elif alg == "\"encoder\"":
+            print("Choose encoder")
+            data_rst = trajectory_template(1, multiple_track[i][0], 10, 2, False)
+        elif alg == "\"graphic_features\"":
+            print("Choose graphic_features")
+            data_rst = trajectory_template(2, multiple_track[i][0], 10, 2, False)
+        else:
+            print("default as dtw")
+            data_rst = trajectory_template(0, multiple_track[i][0], 10, 2, False)
+        # now we need to regroup the list by data_rst[i][0] -> the round number
+        # the structure of the grouping is as follows:
+        #   mapping:
+        #   {
+        #       '186' (round number): [[i(track label), start_frame_num, end_frame_num], [...(the same as before)]]
+        #       '49'  (round number): [[...], [...]](the same as before)
+        #   }
+        for j in data_rst:
+            if j[0] in mapping.keys():
+                mapping.get(j[0]).append([i, j[1], j[2]])
+            else :
+                mapping[j[0]] = [[i, j[1], j[2]]]
+        i = i + 1
+    print(mapping)
+    data_rst = []
+    for key, value in mapping.items():
+        if len(value) >= 3:
+            print(str(key) + ": " + str(value))
+            range = {'start': 0, 'end': 0}
+            for k in value:
+                if k[0] == 0: # first time enter the block, fill the initial start and end
+                    range['start'] = k[1]
+                    range['end'] = k[2]
+                else :
+                    if (k[1] < range['start']):
+                        range['start'] = k[1]
+                    if (k[2] > range['end']):
+                        range['end'] = k[2]
+            print("range: " + str(range))
+            if range['start'] < range['end']:
+                data_rst.append([key, range['start'], range['end']])
+    print(data_rst)
+    return data_rst
+
+def alignment(multiple_track):
+    # still hesitating whether implementation of this alignment can be done with in time
+    # for now, do nothing
+    # try to just match enough trajectories to overlap
+    return multiple_track
 
 def add_routes(app):
     @app.route('/')
@@ -167,24 +233,41 @@ def add_routes(app):
         # """
         try:
             
-     
-            alg = flask.request.json.get("ChoosingAlgorithm")
-            
-            if alg == "\"dtw\"":
-                print("Choose dtw")
-                data_rst = trajectory_template(0)
-            elif alg == "\"encoder\"":
-                print("Choose encoder")
-                data_rst = trajectory_template(1)
-            elif alg == "\"graphic_features\"":
-                print("Choose graphic_features")
-                data_rst = trajectory_template(2)
-            else:
-                print("default")
-                s = 'dtw'
-                data_rst = trajectory_template(0)
+            track_multi = flask.request.get_json()
+            print(track_multi)
+            size_track = len(track_multi)
+            print("size of the track is: " + str(size_track))
 
-            return json.dumps({'status': 'success', 'data': data_rst})
+            # and now first, we must do the alignment of data, that is,
+            # find frames that has players layout just like the trajectories showed (at the beginning and end point).
+
+            # legacy code -> single trajectory
+            data_rst = []
+            if size_track == 1:
+                json_data = track_multi[0][0]
+                alg = json_data['ChoosingAlgorithm']
+                print(alg)
+                if alg == "\"dtw\"":
+                    print("Choose dtw")
+                    data_rst = trajectory_template(0, json_data, 2, 0.5, True)
+                elif alg == "\"encoder\"":
+                    print("Choose encoder")
+                    data_rst = trajectory_template(1, json_data, 2, 0.5, True)
+                elif alg == "\"graphic_features\"":
+                    print("Choose graphic_features")
+                    data_rst = trajectory_template(2, json_data, 2, 0.5, True)
+                else:
+                    print("default as dtw")
+                    data_rst = trajectory_template(0, json_data, 2, 0.5, True)
+                return json.dumps({'status': 'success', 'data': data_rst})
+            elif size_track == 0:
+                print("watching the result of matching")
+                return json.dumps({'status': 'success'})
+            else :
+                # now do the multiple trajectories matching
+                multiple_rst = multiple_matching(track_multi)
+                return json.dumps({'status': 'success', 'data': multiple_rst})
+
         except Exception as _:
             print(_)
             return json.dumps({'status': 'failed'})
