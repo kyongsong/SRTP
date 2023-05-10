@@ -85,8 +85,8 @@ def matrix_generate(current_round, Team):
     # do the passing statistics working
     # first in order to make the pass matrix's value bigger, we use the passing data from 10 rounds before to current round
     start_round = 0
-    if current_round >= 10:
-        start_round = current_round - 10
+    if current_round >= 30:
+        start_round = current_round - 30
     walk_round = start_round
     # then walk all rounds and refresh the matrix
     while walk_round <= current_round:
