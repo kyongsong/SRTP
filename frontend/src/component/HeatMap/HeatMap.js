@@ -7,6 +7,7 @@ import DetroitPistons from '../../assets/Detroit Pistons.png'
 import { Col, Row } from 'antd';
 import ShotsHeatMap from '../ShotsHeatMap/ShotsHeatMap';
 import ShotsMap from '../ShotsMap/ShotsMap';
+import Isolate from '../Isolate/Isolate';
 import { RedoOutlined , SettingOutlined, SearchOutlined,DribbbleOutlined ,EditOutlined,ToolOutlined,DashOutlined ,UserOutlined   } from '@ant-design/icons';
 import request from '../../utils/request';
 import PassMatrix from '../PassMatrix/PassMatrix';
@@ -253,8 +254,12 @@ function HeatMap(){
                 
                 </Col> 
             </Row>
+            <div className='HeatMap'>
+            <Isolate/>
+              </div>
             </Tabs.TabPane> 
-    
+            
+
            </Tabs> 
            
           
