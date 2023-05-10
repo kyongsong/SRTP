@@ -21,7 +21,6 @@ game_name = '0021500001'
 def matrix_generate_graph(current_round, Team):
     # this mapping is used to map the sequence number used in the system to the number of the player on the court
     # that is, the mapping is from playerid to seq_num, seq_num to jersey
-    player_mapping = {}  # playerid to seq_num
 
     immediate_return_flag = False
     # we need to adjust the current round to the proper round which matches the team argument
@@ -37,7 +36,6 @@ def matrix_generate_graph(current_round, Team):
             immediate_return_flag = True
 
     # do the actual job of searching
-
     # store the playerid of the player currently on the board
     home_player_list = []
     visitor_player_list = []
@@ -101,6 +99,8 @@ def matrix_generate_graph(current_round, Team):
                     tgt = []  # the player who get the pass
                     for frame in movement_data:
                         if frame["ball_status"] == "get pass":
+                            if frame["event_player"] not in final_player_list:
+                                break
                             tgt.append(final_player_list.index(frame["event_player"]))
                             # do backwards searching for give pass
                             frame_idx = movement_data.index(frame)
@@ -108,6 +108,9 @@ def matrix_generate_graph(current_round, Team):
                             while index_backwards >= 0 and movement_data[index_backwards]["ball_status"] != "give pass":
                                 index_backwards = index_backwards - 1
                             # print("index backwards: " + str(index_backwards))
+                            if movement_data[index_backwards]["event_player"] not in final_player_list:
+                                tgt.remove(final_player_list.index(frame["event_player"]))
+                                break
                             src.append(final_player_list.index(movement_data[index_backwards]["event_player"]))
                     # refresh the matrix according to the data retreived
                     index_match = 0
@@ -118,7 +121,8 @@ def matrix_generate_graph(current_round, Team):
     return rst
 
 # debug
-# pprint(matrix_generate_graph(30, 'visitor'))
+pprint(matrix_generate_graph(11, 'home'))
+pprint(matrix_generate_graph(11, 'visitor'))
 
 # method:
 # we have the ball_status, and the status can show the fine-grained data frame
