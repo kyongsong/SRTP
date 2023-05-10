@@ -9,6 +9,7 @@ import ShotsHeatMap from '../ShotsHeatMap/ShotsHeatMap';
 import ShotsMap from '../ShotsMap/ShotsMap';
 import { RedoOutlined , SettingOutlined, SearchOutlined,DribbbleOutlined ,EditOutlined,ToolOutlined,DashOutlined ,UserOutlined   } from '@ant-design/icons';
 import request from '../../utils/request';
+import PassMatrix from '../PassMatrix/PassMatrix';
 const {Title}=Typography;
 var storage=window.localStorage;
 function HeatMap(){
@@ -17,6 +18,8 @@ function HeatMap(){
  
   
    useEffect(()=>{
+    
+    
     
 
     let Value=new Array();
@@ -209,53 +212,7 @@ function HeatMap(){
                 </Col> 
             </Row>
             <div className='HeatMap'>
-            <svg width="500" height="500" viewBox="0 0 500 500">
-
-  <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
-  <rect x="50" y="50" width="400" height="400" fill="#F0F0F0" />
-  <g>
-   
-    <text x="10" y="30" font-size="12" fill="#000">球员</text>
-    <text x="30" y="30" font-size="12" fill="#000">位置</text>
-    <text x="50" y="30" font-size="12" fill="#000">1</text>
-    <text x="160" y="30" font-size="12" fill="#000">13</text>
-    <text x="5" y="60" font-size="12" fill="#000">1</text>
-    <text x="5" y="170" font-size="12" fill="#000">13</text>
-   
-    <g>
-    
-      <rect x="50" y="50" width="30" height="30" fill="#d9efff" stroke="#000000" />
-      <text x="65" y="70" fill="#000" font-size="10">球员1</text>
-      <text x="55" y="80" fill="#000" font-size="10">位置1</text>
-      <text x="55" y="90" fill="#000" font-size="10">5</text>
-    </g>
-  
-    <g transform="translate(0, 30)">
-     <rect x="50" y="50" width="30" height="30" fill="#a7ea7f" stroke="#000000" />
-      <text x="65" y="70" fill="#000" font-size="10">球员2</text>
-      <text x="55" y="80" fill="#000" font-size="10">位置2</text>
-      <text x="55" y="90" fill="#000" font-size="10">10</text>
-    </g>
-
-  </g>
-
-  <g>
-    <rect x="50" y="450" width="20" height="20" fill="#d9efff" stroke="#000000" />
-    <text x="80" y="465" fill="#000" font-size="10">数值最小</text>
-  </g>
-  <g>
-    <rect x="150" y="450" width="20" height="20" fill="#a7ea7f" stroke="#000000" />
-    <text x="180" y="465" fill="#000" font-size="10">数值较小</text>
-  </g>
-  <g>
-    <rect x="250" y="450" width="20" height="20" fill="#61c750" stroke="#000000" />
-    <text x="280" y="465" fill="#000" font-size="10">数值中等</text>
-  </g>
-  <g>
-    <rect x="350" y="450" width="20" height="20" fill="#004F33" stroke="#000000" />
-    <text x="380" y="465" fill="#000" font-size="10">数值最大</text>
-  </g>
-</svg>
+            <PassMatrix/>
               </div>
            </Tabs.TabPane>
        

@@ -442,7 +442,6 @@ def add_routes(app):
         try:
             round_ = flask.request.get_json()
             current_round = int(round_["current_round"])
-            print("check type", type(current_round), current_round)
             if current_round >= 19:
                 start_round = current_round - 19
             else:
@@ -455,21 +454,20 @@ def add_routes(app):
             index = start_round
             while index <= current_round:
                 is_shoot_round = False
-                shot_type = ""
                 with open(os.path.join('0021500001', str(index), 'metadata.json'), 'r') as f_meta:
                     metadata = json.load(f_meta)
                     event_result = str(metadata["event_result"])
-                    if event_result.find("shot"):
+                    print(event_result)
+                    if event_result.find("shot") != -1:
                         is_shoot_round = True
-                        if event_result.find("2pt") and event_result.find("made"):
+                        if event_result.find("2pt") != -1 and event_result.find("made") != -1:
                             shot_type = "2pt&made"
-                        elif event_result.find("2pt") and event_result.find("miss"):
+                        elif event_result.find("2pt") != -1 and event_result.find("miss") != -1:
                             shot_type = "2pt&miss"
-                        elif event_result.find("3pt") and event_result.find("made"):
+                        elif event_result.find("3pt") != -1 and event_result.find("made") != -1:
                             shot_type = "3pt&made"
                         else:
                             shot_type = "3pt&miss"
-
                 if is_shoot_round:
                     with open(os.path.join(game_name, str(index), 'movement_refined_shot_clock.json'), 'r') as f_data:
                         mvment = json.load(f_data)  # mvment is filled with the refined data of current round
@@ -534,7 +532,7 @@ def add_routes(app):
                             if cur_end - cur_start > max_end - max_start:
                                 max_strat = cur_start
                                 max_end = cur_end
-                                iso_player = frame["ball_status"]["event_player"]
+                                iso_player = frame["event_player"]
                         else: # 持球状态结束
                             cur_end = cur_end + 1
                             cur_start = cur_end
@@ -557,7 +555,7 @@ def add_routes(app):
                             if cnt > metadata['possession_end_index']:
                                 break
                     iso_results.append({"iso_player":iso_player, "iso_trace":iso_trace, "iso_result": result})
-            index = index + 1
+            index = index - 1
             print(iso_results)
             return json.dumps(iso_results)
 
