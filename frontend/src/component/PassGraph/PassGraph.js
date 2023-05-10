@@ -50,17 +50,15 @@ function PassGraph(){
         var PeriodData={'current_round':110,"Team":'home'};
         request.post('/PassGraph', PeriodData).then(
             res =>{
-                var length=13;
-                var CurIndex="Player";
-                var max=0;
+              
                 
               
 
                let PlayerPosition=[];
                PlayerPosition=[100,150,100,350,100,550,350,250,350,450];
-               for(var i=0;i<res.data.length;i++){                
+               for(var i=0;i<5;i++){                
                     var value=res.data[i]
-                    for(var j=0;j<res.data.length;j++){
+                    for(var j=0;j<5;j++){
                         if(i!=j){
                             var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
                             line.setAttribute("x1", PlayerPosition[i*2]);
