@@ -19,8 +19,7 @@ import BallAndPlayer from '../../component/BallAndPlayer/BallAndPlayer';
 
 import HeatMap from '../../component/HeatMap/HeatMap'
 import BasketballBg from '../BasketballPage/BasketballBackground2.jpg'
-import CriticalData from '../../component/CriticalData/CriticalData';
-import ScoreMap from '../../component/ScoreMap/ScoreMap';
+
 
 const { Header, Footer, Sider, Content } = Layout;
 
