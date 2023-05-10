@@ -55,7 +55,7 @@
     ```
     {
     'current_round':x
-    }xq
+    }
     ```
 
   + 返回格式
@@ -75,8 +75,6 @@
     }
     ```
   
-    
-  
   + 返回格式
   
   ```
@@ -89,8 +87,26 @@
   }
   ```
   
-  
-  
++ @app.route("/isolate", methods=['POST'])
+
+  + 提交格式
+
+    ```
+  {
+    'current_round':x
+  }
+    ```
+
+  + 返回格式
+
+    ```
+    [{"iso_player":james, "iso_trace":[[x,y],[x,y]....], "iso_result": made/miss},
+    {"iso_player":curry, "iso_trace":[[x,y],[x,y]....], "iso_result": made/miss},
+    {"iso_player":irving, "iso_trace":[[x,y],[x,y]....], "iso_result": made/miss} ...]
+    ```
+    
+    isolate的含义是单打，即我们会去寻找当前回合前20个回合的球星单打轨迹，并将单打结果返回给前端，包括单打球员名字、单打轨迹、单打结果（made和miss两种情况），前端绘制时，只需要在球场上绘制轨迹，在轨迹起点标注球员名字，红色表达单打成功，黑色表示单打失败
+
 + @app.route("/Match", methods=['POST'])
 
   + 提交格式

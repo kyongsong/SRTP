@@ -497,3 +497,71 @@ def add_routes(app):
             except Exception as _:
                 print(_)
                 return json.dumps({'message': 'failed'})
+
+        @app.route("/isolate", methods=['POST'])
+        def iso() -> str:
+            try:
+                round_ = flask.request.get_json()
+                current_round = int(round_["current_round"])
+                if current_round >= 19:
+                    start_round = current_round - 19
+                else:
+                    start_round = 0
+
+                iso_results = []
+                index = current_round
+                while index >= start_round:
+                    result = "miss"
+                    with open(os.path.join('0021500001', str(index), 'metadata.json'), 'r') as f_meta:
+                        metadata = json.load(f_meta)
+                        event_result = str(metadata["event_result"])
+                        if event_result.find("foul") or (event_result.find("shot") and event_result.find("made")):
+                            result = "made"
+
+                    is_iso_round = False
+                    max_start = 0
+                    max_end = max_start
+                    iso_player = ""
+                    with open(os.path.join(game_name, str(index), 'movement_refined_shot_clock.json'), 'r') as f_data:
+                        mvment = json.load(f_data)  # mvment is filled with the refined data of current round
+                        cnt = metadata['possession_start_index']
+                        cur_start = 0
+                        cur_end = cur_start
+                        # frame: frame of round
+                        for frame in mvment:
+                            if frame["ball_status"] == "holding":
+                                cur_end = cur_end + 1
+                                if cur_end - cur_start > max_end - max_start:
+                                    max_strat = cur_start
+                                    max_end = cur_end
+                                    iso_player = frame["ball_status"]["event_player"]
+                            else: # 持球状态结束
+                                cur_end = cur_end + 1
+                                cur_start = cur_end
+                            cnt = cnt + 1  # cnt = frame_id
+                            if cnt > metadata['possession_end_index']:
+                                break
+
+                        # 如果持球时间超过本回合时间的1/3，我们认为单打发生了
+                        if max_end - max_strat >= (metadata['possession_end_index'] - metadata['possession_start_index'])/3:
+                            is_iso_round = True
+                    iso_trace = []
+                    if is_iso_round:
+                        with open(os.path.join(game_name, str(index), 'movement_refined_shot_clock.json'), 'r') as f_data:
+                            mvment = json.load(f_data)  # mvment is filled with the refined data of current round
+                            cnt = metadata['possession_start_index']
+                            for frame in mvment:
+                                if cnt >= max_strat and cnt <= max_end:
+                                    iso_trace.append([frame["ball_position"][0], frame["ball_position"][1]])
+                                cnt = cnt + 1  # cnt = frame_id
+                                if cnt > metadata['possession_end_index']:
+                                    break
+                        iso_results.append({"iso_player":iso_player, "iso_trace":iso_trace, "iso_result": result})
+                index = index + 1
+                print(iso_results)
+                return json.dumps(iso_results)
+
+
+            except Exception as _:
+                print(_)
+                return json.dumps({'message': 'failed'})
