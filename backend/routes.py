@@ -610,7 +610,7 @@ def add_routes(app):
                 with open(os.path.join('0021500001', str(index), 'metadata.json'), 'r') as f_meta:
                     metadata = json.load(f_meta)
                     event_result = str(metadata["event_result"])
-                    if event_result.find("foul") or (event_result.find("shot") and event_result.find("made")):
+                    if event_result.find("foul") == -1 or (event_result.find("shot") == -1 and event_result.find("made") == -1):
                         result = "made"
 
                 is_iso_round = False
