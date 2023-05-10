@@ -5,7 +5,7 @@ import Player1 from "../../assets/Player1.png"
 
 function Isolate(){
     useEffect(()=>{
-        var PeriodData={'current_round':110};
+        var PeriodData={'current_round':120};
       
         request.post('/isolate', PeriodData).then(
             res =>{
@@ -25,6 +25,9 @@ function Isolate(){
                   var color="blue"
                   var StartX;
                   var StartY;
+                  var Path="../../assets/"
+                  Path+="Player"+i+".png"
+                  console.log(Path)
         
                   
                   for(var j=0;j<Value.length;j++)
@@ -52,14 +55,24 @@ function Isolate(){
                   //绘制轨迹
                   console.log(coordinates)
                   const polyline = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+
                   polyline.setAttribute("points", coordinates);
                   polyline.setAttribute("stroke", color);
                   polyline.setAttribute("stroke-width", "8");
                   polyline.setAttribute("fill", "none");
+
+                  //绘制clippath
+                 
+              
+               
                   
+                  
+                 
+
                   // 将polyline元素添加到SVG中
                   const svg = document.getElementById("PlayerScratch");
                   svg.appendChild(polyline);
+              
                   
                   
                 }
@@ -83,10 +96,9 @@ function Isolate(){
         <rect x="0" y="0" width="1200" height="677" fill="none" pointerEvents="all" />
         
         <g id="PlayerScratch"></g>
-        <clipPath id="myClip">
-    <circle cx="50" cy="50" r="40" />
-  </clipPath>
-  <image x="10" y="10" width="80" height="80" xlinkHref={Player1} clip-path="url(#myClip)" />
+
+
+
         </g>
         </svg >  
 
