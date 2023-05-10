@@ -402,7 +402,6 @@ def add_routes(app):
         try:
             round_ = flask.request.get_json()
             current_round = int(round_["current_round"])
-            print("check type", type(current_round), current_round)
             if current_round >= 19:
                 start_round = current_round - 19
             else:
@@ -437,3 +436,64 @@ def add_routes(app):
         except Exception as _:
             print(_)
             return json.dumps({'message': 'failed'})
+        
+        @app.route("/ShotsMap", methods=['POST'])
+        def shot_map() -> str:
+            try:
+                round_ = flask.request.get_json()
+                current_round = int(round_["current_round"])
+                print("check type", type(current_round), current_round)
+                if current_round >= 19:
+                    start_round = current_round - 19
+                else:
+                    start_round = 0
+
+                shot_2pt_made_pos = []
+                shot_2pt_miss_pos = []
+                shot_3pt_made_pos = []
+                shot_3pt_miss_pos = []
+                index = start_round
+                while index <= current_round:
+                    is_shoot_round = False
+                    shot_type = ""
+                    with open(os.path.join('0021500001', str(index), 'metadata.json'), 'r') as f_meta:
+                        metadata = json.load(f_meta)
+                        event_result = str(metadata["event_result"])
+                        if event_result.find("shot"):
+                            is_shoot_round = True
+                            if event_result.find("2pt") and event_result.find("made"):
+                                shot_type = "2pt&made"
+                            elif event_result.find("2pt") and event_result.find("miss"):
+                                shot_type = "2pt&miss"
+                            elif event_result.find("3pt") and event_result.find("made"):
+                                shot_type = "3pt&made"
+                            else:
+                                shot_type = "3pt&miss"
+
+                    if is_shoot_round:
+                        with open(os.path.join(game_name, str(index), 'movement_refined_shot_clock.json'), 'r') as f_data:
+                            mvment = json.load(f_data)  # mvment is filled with the refined data of current round
+                            cnt = metadata['possession_start_index']
+                            # frame: frame of round
+                            for frame in mvment:
+                                if str(frame["ball_status"]) == "shot":
+                                    if shot_type == "2pt&made":
+                                        shot_2pt_made_pos.append([frame["ball_position"][0], frame["ball_position"][1]])
+                                    elif shot_type == "2pt&miss":
+                                        shot_2pt_miss_pos.append([frame["ball_position"][0], frame["ball_position"][1]])
+                                    elif shot_type == "3pt&made":
+                                        shot_3pt_made_pos.append([frame["ball_position"][0], frame["ball_position"][1]])
+                                    else:
+                                        shot_3pt_miss_pos.append([frame["ball_position"][0], frame["ball_position"][1]])
+                                    break
+                                cnt = cnt + 1  # cnt = frame_id
+                                if cnt > metadata['possession_end_index']:
+                                    break
+                    index = index + 1
+                print({"2pt&made": shot_2pt_made_pos, "2pt&miss": shot_2pt_miss_pos, "3pt&made": shot_3pt_made_pos, "3pt&miss": shot_3pt_miss_pos})
+                return json.dumps({"2pt&made": shot_2pt_made_pos, "2pt&miss": shot_2pt_miss_pos, "3pt&made": shot_3pt_made_pos, "3pt&miss": shot_3pt_miss_pos})
+
+
+            except Exception as _:
+                print(_)
+                return json.dumps({'message': 'failed'})

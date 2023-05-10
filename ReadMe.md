@@ -41,17 +41,13 @@
   + 返回格式
 
     ```
-    {
-    ‘shot_sucess‘:
-    	{[x,y],[x,y]....},
-    'shot_failed':{
-    	{[x,y],[x,y].....}
-    	}
-    }
+    {"2pt&made": shot_2pt_made_pos, "2pt&miss": shot_2pt_miss_pos, "3pt&made": shot_3pt_made_pos, "3pt&miss": shot_3pt_miss_pos}
+    
+    shot_2pt_made_pos = [[x1,y1], [x2,y2], ...], shot_2pt_miss_pos ...
     ```
-
-    返回当前回合附近的近十个回合的出手位置
-
+    
+    返回当前回合附近的近二十个回合的出手位置
+  
 + @app.route("/ShotsHeatMap", methods=['POST'])
 
   + 提交格式
