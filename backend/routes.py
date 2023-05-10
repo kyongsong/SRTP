@@ -17,6 +17,104 @@ index_value = 0
 # 比赛名称
 game_name = '0021500001'
 
+# method:
+# we have the ball_status, and the status can show the fine-grained data frame
+# the status of the ball contains many possible state
+# The states relative to the passing of the ball are as follows: give pass -> passing -> get pass
+# But we are not sure what will happen if the ball is stopped by the other team while flying
+# So, we just search for "get pass", and then search backwards to find the "give pass"
+# to ensure the passing is completed
+def matrix_generate(current_round, Team):
+    # this mapping is used to map the sequence number used in the system to the number of the player on the court
+    # that is, the mapping is from playerid to seq_num, seq_num to jersey
+    player_mapping = {}  # playerid to seq_num
+    construct_mapping = {}  # seq_num to jersey
+
+    immediate_return_flag = False
+    # we need to adjust the current round to the proper round which matches the team argument
+    with open(os.path.join(game_name, str(current_round), "metadata.json"), "r") as f_test:
+        metadata = json.load(f_test)
+        offensive_team = metadata["offensive_team"]
+        while offensive_team != Team and current_round != 0:
+            with open(os.path.join(game_name, str(current_round), "metadata.json"), "r") as f_inner_test:
+                metadata = json.load(f_inner_test)
+                offensive_team = metadata["offensive_team"]
+                current_round = current_round - 1
+        if offensive_team != Team and current_round == 0: # no data need to return
+            immediate_return_flag = True
+
+    # do the actual job of searching
+    with open(os.path.join(game_name, str(current_round), "metadata.json"), "r") as f:
+        metadata = json.load(f)
+        home_team = metadata["home"]  # dict type
+        visitor_team = metadata["visitor"]  # dict type
+        i = 0
+        while i < 13:
+            if Team == 'home':
+                player_mapping[home_team["players"][i]["playerid"]] = i + 1
+                construct_mapping['player' + str(i + 1)] = home_team["players"][i]["jersey"]
+            elif Team == 'visitor':
+                player_mapping[visitor_team["players"][i]["playerid"]] = i + 1
+                construct_mapping['player' + str(i + 1)] = visitor_team["players"][i]["jersey"]
+            i = i + 1
+
+    # initialization of the pass matrix
+    rst = {'player1': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           'player2': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           'player3': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           'player4': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           'player5': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           'player6': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           'player7': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           'player8': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           'player9': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           'player10': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           'player11': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           'player12': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           'player13': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}
+
+    if immediate_return_flag:
+        return rst
+
+    # fill the diagonal element -> the number of the player.
+    inner_idx = 0
+    for key, value in rst.items():
+        value[inner_idx] = int(construct_mapping[key])
+        inner_idx = inner_idx + 1
+
+    # do the passing statistics working
+    # first in order to make the pass matrix's value bigger, we use the passing data from 10 rounds before to current round
+    start_round = 0
+    if current_round >= 10:
+        start_round = current_round - 10
+    walk_round = start_round
+    # then walk all rounds and refresh the matrix
+    while walk_round <= current_round:
+        with open(os.path.join(game_name, str(walk_round), "metadata.json"), "r") as f:
+            metadata = json.load(f)
+            if metadata["offensive_team"] == Team:
+                with open(os.path.join(game_name, str(walk_round), "movement_refined_shot_clock.json"), "r") as f:
+                    movement_data = json.load(f)
+                    src = []  # the player who give the pass
+                    tgt = []  # the player who get the pass
+                    for frame in movement_data:
+                        if frame["ball_status"] == "get pass":
+                            tgt.append(player_mapping[frame["event_player"]] - 1)
+                            # do backwards searching for give pass
+                            frame_idx = movement_data.index(frame)
+                            index_backwards = frame_idx - 1
+                            while index_backwards >= 0 and movement_data[index_backwards]["ball_status"] != "give pass":
+                                index_backwards = index_backwards - 1
+                            # print("index backwards: " + str(index_backwards))
+                            src.append('player' + str(player_mapping[movement_data[index_backwards]["event_player"]]))
+                    # refresh the matrix according to the data retreived
+                    index_match = 0
+                    for player in src:
+                        rst[player][tgt[index_match]] = rst[player][tgt[index_match]] + 1
+                        index_match = index_match + 1
+        walk_round = walk_round + 1
+    return rst
+
 def trajectory_template(search_method, front_data, intended_rst_num, stride, single_search):
     # 1 处理从前端获取的轨迹信息，将其存储在scatch_track中
     scatch_track = front_data['MoveTrack']
@@ -215,44 +313,49 @@ def visual_info(data_rst):
     for result in data_rst:
         with open(os.path.join(game_name, str(result[0]), 'metadata.json'), 'r') as meta_f:
             metadata = json.load(meta_f)  # metadata of current round
-            with open(os.path.join(game_name, str(result[0]), 'movement_refined_shot_clock.json'), 'r') as f:
-                mvment = json.load(f)
-                start_frame = mvment[result[1]] # get the start frame's json file
-                print(start_frame)
-                event_player_num = start_frame["event_player"]
-                print(type(event_player_num))
-                print(event_player_num)
-                print(player_mapping[event_player_num])
+            event_player_num = metadata["terminal_player"]
+            # here we notice that, when the ball is at the status of "passing", the event_player_num will be none.
+            # Thus, in order to avoid this case, we have to process the none case
+            print(type(event_player_num))
+            print(event_player_num)
+            print(player_mapping[int(event_player_num)])
 
-                offense_team = metadata["offensive_team"]
-                visitor_name = metadata["visitor"]["name"]
-                home_name = metadata["home"]["name"]
-                events_cur_round = metadata["event_result"]
-                events_splitted_list = events_cur_round.split("&")
-                print(home_name)
-                print(visitor_name)
-                print(offense_team)
-                if offense_team == "visitor":
-                    print("visitor checked")
-                    AgainstTeam.append(visitor_name)
-                    print(AgainstTeam)
-                    events.append(events_splitted_list[0])
-                    print(events)
-                    player_Name.append(player_mapping[event_player_num])
-                    print(player_Name)
-                else :
-                    print("home checked")
-                    AgainstTeam.append(home_name)
-                    print(AgainstTeam)
-                    events.append(events_splitted_list[0])
-                    print(events)
-                    player_Name.append(player_mapping[event_player_num])
-                    print(player_Name)
+            offense_team = metadata["offensive_team"]
+            visitor_name = metadata["visitor"]["name"]
+            home_name = metadata["home"]["name"]
+            events_cur_round = metadata["event_result"]
+            events_splitted_list = events_cur_round.split("&")
+            events_final = events_splitted_list[0]
+            if events_splitted_list[0] == "2pt shot" or events_splitted_list[0] == "3pt shot":
+                if events_splitted_list[1] == "made":
+                    events_final = events_final + " Y"
+                elif events_splitted_list[1] == "miss":
+                    events_final = events_final + " N"
+            print(home_name)
+            print(visitor_name)
+            print(offense_team)
+            if offense_team == "visitor":
+                print("visitor checked")
+                AgainstTeam.append(home_name)
+                print(AgainstTeam)
+                events.append(events_final)
+                print(events)
+                player_Name.append(player_mapping[int(event_player_num)])
+                print(player_Name)
+            else :
+                print("home checked")
+                AgainstTeam.append(visitor_name)
+                print(AgainstTeam)
+                events.append(events_splitted_list[0])
+                print(events)
+                player_Name.append(player_mapping[int(event_player_num)])
+                print(player_Name)
     res['events'] = events
     res['player_Name'] = player_Name
     res['AgainstTeam'] = AgainstTeam
     print(res)
     return res
+
 
 def alignment(multiple_track):
     # still hesitating whether implementation of this alignment can be done before deadline
@@ -388,20 +491,12 @@ def add_routes(app):
             print(_)
             return json.dumps({'message': 'failed'})
 
-    @app.route("/PassMatrix", methods=['POST'])
-    def pass_matrix() -> str:
-        try:
-            front_data = flask.request.get_json()
-            print(front_data)
-        except Exception as _:
-            print(_)
-            return json.dumps({'message': 'failed'})
-
     @app.route("/ShotsHeatMap", methods=['POST'])
     def shot_heat_map() -> str:
         try:
             round_ = flask.request.get_json()
             current_round = int(round_["current_round"])
+            print(current_round)
             if current_round >= 19:
                 start_round = current_round - 19
             else:
@@ -560,6 +655,19 @@ def add_routes(app):
             return json.dumps(iso_results)
 
 
+        except Exception as _:
+            print(_)
+            return json.dumps({'message': 'failed'})
+
+    @app.route("/PassMatrix", methods=['POST'])
+    def pass_matrix() -> str:
+        try:
+            front_data = flask.request.get_json()
+            print(front_data)
+            current_round = front_data["current_round"]
+            Team = front_data["Team"]
+            rst = matrix_generate(current_round, Team)
+            return json.dumps(rst)
         except Exception as _:
             print(_)
             return json.dumps({'message': 'failed'})
