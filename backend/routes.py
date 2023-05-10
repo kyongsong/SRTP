@@ -454,7 +454,6 @@ def add_routes(app):
             index = start_round
             while index <= current_round:
                 is_shoot_round = False
-                shot_type = ""
                 with open(os.path.join('0021500001', str(index), 'metadata.json'), 'r') as f_meta:
                     metadata = json.load(f_meta)
                     event_result = str(metadata["event_result"])
@@ -469,7 +468,6 @@ def add_routes(app):
                             shot_type = "3pt&made"
                         else:
                             shot_type = "3pt&miss"
-                        print(shot_type)
                 if is_shoot_round:
                     with open(os.path.join(game_name, str(index), 'movement_refined_shot_clock.json'), 'r') as f_data:
                         mvment = json.load(f_data)  # mvment is filled with the refined data of current round
@@ -534,7 +532,7 @@ def add_routes(app):
                             if cur_end - cur_start > max_end - max_start:
                                 max_strat = cur_start
                                 max_end = cur_end
-                                iso_player = frame["ball_status"]["event_player"]
+                                iso_player = frame["event_player"]
                         else: # 持球状态结束
                             cur_end = cur_end + 1
                             cur_start = cur_end
@@ -557,7 +555,7 @@ def add_routes(app):
                             if cnt > metadata['possession_end_index']:
                                 break
                     iso_results.append({"iso_player":iso_player, "iso_trace":iso_trace, "iso_result": result})
-            index = index + 1
+            index = index - 1
             print(iso_results)
             return json.dumps(iso_results)
 
