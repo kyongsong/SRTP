@@ -121,8 +121,8 @@ def matrix_generate_graph(current_round, Team):
     return rst
 
 # debug
-pprint(matrix_generate_graph(11, 'home'))
-pprint(matrix_generate_graph(11, 'visitor'))
+# pprint(matrix_generate_graph(11, 'home'))
+# pprint(matrix_generate_graph(11, 'visitor'))
 
 # method:
 # we have the ball_status, and the status can show the fine-grained data frame
@@ -326,6 +326,7 @@ def trajectory_template(search_method, front_data, intended_rst_num, stride, sin
 
         dis_list.sort(key=lambda x: x[0])
         # now the idx_min labels the best matching.
+        print("New Round of Auto-Threshold:")
         print('dis_list legnth is: ' + str(len(dis_list)))
         print('threshold is: ' + str(threshold))
         i = 0
@@ -347,8 +348,8 @@ def trajectory_template(search_method, front_data, intended_rst_num, stride, sin
                 i = i + 1
         threshold = threshold + stride
 
-    print(data_rst)
-    print(threshold)
+    print("data_rst is (format: ['round number', start frame number, end frame number]) -> ", data_rst)
+    print("Final threshold of the Auto-Threshold is: ", threshold)
 
     return data_rst
 
@@ -359,16 +360,16 @@ def multiple_matching(multiple_track):
     while i < size_tracks:
         alg = multiple_track[i][0]['ChoosingAlgorithm']
         if alg == "\"dtw\"":
-            print("Choose dtw")
+            print("Choose dtw as one of the mutiple trajectory algorithms")
             data_rst = trajectory_template(0, multiple_track[i][0], 15, 2, False)
         elif alg == "\"encoder\"":
-            print("Choose encoder")
+            print("Choose encoder as one of the mutiple trajectory algorithms")
             data_rst = trajectory_template(1, multiple_track[i][0], 15, 2, False)
         elif alg == "\"graphic_features\"":
-            print("Choose graphic_features")
+            print("Choose graphic_features as one of the mutiple trajectory algorithms")
             data_rst = trajectory_template(2, multiple_track[i][0], 15, 2, False)
         else:
-            print("default as dtw")
+            print("default as dtw algorithm")
             data_rst = trajectory_template(0, multiple_track[i][0], 15, 2, False)
         # now we need to regroup the list by data_rst[i][0] -> the round number
         # the structure of the grouping is as follows:
@@ -383,7 +384,7 @@ def multiple_matching(multiple_track):
             else :
                 mapping[j[0]] = [[i, j[1], j[2]]]
         i = i + 1
-    print(mapping)
+    # print(mapping)
     data_rst = []
     for key, value in mapping.items():
         if len(value) >= 3:
@@ -398,10 +399,10 @@ def multiple_matching(multiple_track):
                         range['start'] = k[1]
                     if (k[2] > range['end']):
                         range['end'] = k[2]
-            print("range: " + str(range))
+            print("frame range in multiple trajectory matching is: " + str(range))
             if range['start'] < range['end']:
                 data_rst.append([key, range['start'], range['end']])
-    print(data_rst)
+    print("data_rst is (format: ['round number', start frame number, end frame number]) -> ", data_rst)
     return data_rst
 
 def visual_info(data_rst):
@@ -423,9 +424,9 @@ def visual_info(data_rst):
             event_player_num = metadata["terminal_player"]
             # here we notice that, when the ball is at the status of "passing", the event_player_num will be none.
             # Thus, in order to avoid this case, we have to process the none case
-            print(type(event_player_num))
-            print(event_player_num)
-            print(player_mapping[int(event_player_num)])
+            # print(type(event_player_num))
+            # print(event_player_num)
+            # print(player_mapping[int(event_player_num)])
 
             offense_team = metadata["offensive_team"]
             visitor_name = metadata["visitor"]["name"]
@@ -438,29 +439,29 @@ def visual_info(data_rst):
                     events_final = events_final + " Y"
                 elif events_splitted_list[1] == "miss":
                     events_final = events_final + " N"
-            print(home_name)
-            print(visitor_name)
-            print(offense_team)
+            # print(home_name)
+            # print(visitor_name)
+            # print(offense_team)
             if offense_team == "visitor":
-                print("visitor checked")
+                # print("visitor checked")
                 AgainstTeam.append(home_name)
-                print(AgainstTeam)
+                # print(AgainstTeam)
                 events.append(events_final)
-                print(events)
+                # print(events)
                 player_Name.append(player_mapping[int(event_player_num)])
-                print(player_Name)
+                # print(player_Name)
             else :
-                print("home checked")
+                # print("home checked")
                 AgainstTeam.append(visitor_name)
-                print(AgainstTeam)
+                # print(AgainstTeam)
                 events.append(events_splitted_list[0])
-                print(events)
+                # print(events)
                 player_Name.append(player_mapping[int(event_player_num)])
-                print(player_Name)
+                # print(player_Name)
     res['events'] = events
     res['player_Name'] = player_Name
     res['AgainstTeam'] = AgainstTeam
-    print(res)
+    # print(res)
     return res
 
 
@@ -478,7 +479,7 @@ def add_routes(app):
     def get_team_score() -> Response | str:
         try:
             global index_value
-            print("score", index_value)
+            # print("score", index_value)
             with open(os.path.join(game_name, str(index_value), 'metadata.json'), 'r') as meta_f:
                 metadata = json.load(meta_f)  # metadata of current round
                 team_names_scores = {'home': metadata['home']['name'], 'visitor': metadata['visitor']['name'],
@@ -498,9 +499,9 @@ def add_routes(app):
         # """
         try:
             track_multi = flask.request.get_json()
-            print(track_multi)
+            # print(track_multi)
             size_track = len(track_multi)
-            print("size of the track is: " + str(size_track))
+            # print("size of the track is: " + str(size_track))
 
             # and now first, we must do the alignment of data, that is,
             # find frames that has players layout just like the trajectories showed (at the beginning and end point).
@@ -510,21 +511,22 @@ def add_routes(app):
             if size_track == 1:
                 json_data = track_multi[0][0]
                 alg = json_data['ChoosingAlgorithm']
-                print(alg)
+                # print(alg)
                 if alg == "\"dtw\"":
-                    print("Choose dtw")
+                    print("Choose algorithm as dtw")
                     data_rst = trajectory_template(0, json_data, 2, 0.5, True)
                 elif alg == "\"encoder\"":
-                    print("Choose encoder")
+                    print("Choose algorithm as encoder")
                     data_rst = trajectory_template(1, json_data, 2, 0.5, True)
                 elif alg == "\"graphic_features\"":
-                    print("Choose graphic_features")
+                    print("Choose algorithm as graphic_features")
                     data_rst = trajectory_template(2, json_data, 2, 0.5, True)
                 else:
-                    print("default as dtw")
+                    print("default algorithm as dtw")
                     data_rst = trajectory_template(0, json_data, 2, 0.5, True)
                 info = visual_info(data_rst)
-                print(json.dumps({'status': 'success', 'data': data_rst, 'events': info['events'], 'player_Name': info['player_Name'], 'AgainstTeam': info['AgainstTeam']}))
+                print("Package is as follows: ")
+                pprint(json.dumps({'status': 'success', 'data': data_rst, 'events': info['events'], 'player_Name': info['player_Name'], 'AgainstTeam': info['AgainstTeam']}))
                 return json.dumps({'status': 'success', 'data': data_rst, 'events': info['events'], 'player_Name': info['player_Name'], 'AgainstTeam': info['AgainstTeam']})
             elif size_track == 0:
                 print("watching the result of matching")
@@ -533,7 +535,7 @@ def add_routes(app):
                 # now do the multiple trajectories matching
                 multiple_rst = multiple_matching(track_multi)
                 info = visual_info(multiple_rst)
-                print(multiple_rst)
+                print("result of multiple matching is as follows (format: ['round number', start frame number, end frame number]) -> ", multiple_rst)
                 return json.dumps({'status': 'success', 'data': multiple_rst, 'events': info['events'], 'player_Name': info['player_Name'], 'AgainstTeam': info['AgainstTeam']})
 
         except Exception as _:
@@ -604,7 +606,7 @@ def add_routes(app):
         try:
             round_ = flask.request.get_json()
             current_round = int(round_["current_round"])
-            print(current_round)
+            print("Current shot-heat-map analysis round is: ", current_round)
             if current_round >= 19:
                 start_round = current_round - 19
             else:
@@ -632,7 +634,9 @@ def add_routes(app):
                             if cnt > metadata['possession_end_index']:
                                 break
                 index = index + 1
-            print(shot_pos)
+            # print(shot_pos)
+            print("Package of ShotsHeatMap is as follows:")
+            pprint(json.dumps({"shot_postion": shot_pos}))
             return json.dumps({"shot_postion": shot_pos})
 
 
@@ -660,7 +664,7 @@ def add_routes(app):
                 with open(os.path.join('0021500001', str(index), 'metadata.json'), 'r') as f_meta:
                     metadata = json.load(f_meta)
                     event_result = str(metadata["event_result"])
-                    print(event_result)
+                    # print(event_result)
                     if event_result.find("shot") != -1:
                         is_shoot_round = True
                         if event_result.find("2pt") != -1 and event_result.find("made") != -1:
@@ -691,7 +695,8 @@ def add_routes(app):
                             if cnt > metadata['possession_end_index']:
                                 break
                 index = index + 1
-            print({"2pt&made": shot_2pt_made_pos, "2pt&miss": shot_2pt_miss_pos, "3pt&made": shot_3pt_made_pos, "3pt&miss": shot_3pt_miss_pos})
+            print("Shots-map data as follows: ")
+            pprint({"2pt&made": shot_2pt_made_pos, "2pt&miss": shot_2pt_miss_pos, "3pt&made": shot_3pt_made_pos, "3pt&miss": shot_3pt_miss_pos})
             return json.dumps({"TwoMade": shot_2pt_made_pos, "TwoMiss": shot_2pt_miss_pos, "ThreeMade": shot_3pt_made_pos, "ThreeMiss": shot_3pt_miss_pos})
 
 
@@ -702,7 +707,7 @@ def add_routes(app):
     @app.route("/isolate", methods=['POST'])
     def iso() -> str:
         try:
-            print("iso iso")
+            # print("iso iso")
             round_ = flask.request.get_json()
             current_round = int(round_["current_round"])
             if current_round >= 19:
@@ -760,7 +765,9 @@ def add_routes(app):
                                 break
                     iso_results.append({"iso_player":iso_player, "iso_trace":iso_trace, "iso_result": result})
                 index = index - 1
-            print(iso_results)
+            # print(iso_results)
+            print("Package of isolate-analysis are as follows: ")
+            pprint(json.dumps(iso_results))
             return json.dumps(iso_results)
 
         except Exception as _:
@@ -771,7 +778,7 @@ def add_routes(app):
     def pass_graph() -> str:
         try:
             front_data = flask.request.get_json()
-            print(front_data)
+            # print(front_data)
             current_round = front_data["current_round"]
             Team = front_data["Team"]
             rst = matrix_generate_graph(current_round, Team)
@@ -784,7 +791,7 @@ def add_routes(app):
     def pass_matrix() -> str:
         try:
             front_data = flask.request.get_json()
-            print(front_data)
+            # print(front_data)
             current_round = front_data["current_round"]
             Team = front_data["Team"]
             rst = matrix_generate(current_round, Team)
