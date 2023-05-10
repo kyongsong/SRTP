@@ -47,11 +47,11 @@ function PassGraph(){
         //         }
         //     }
         // }
-        var PeriodData={'current_round':110,"Team":'home'};
+        var PeriodData={'current_round':10,"Team":'home'};
         request.post('/PassGraph', PeriodData).then(
             res =>{
               
-                
+                console.log(res.data)
               
 
                let PlayerPosition=[];
