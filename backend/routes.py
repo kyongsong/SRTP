@@ -218,6 +218,7 @@ def visual_info(data_rst):
             with open(os.path.join(game_name, str(result[0]), 'movement_refined_shot_clock.json'), 'r') as f:
                 mvment = json.load(f)
                 start_frame = mvment[result[1]] # get the start frame's json file
+                print(start_frame)
                 event_player_num = start_frame["event_player"]
                 print(type(event_player_num))
                 print(event_player_num)
@@ -226,6 +227,8 @@ def visual_info(data_rst):
                 offense_team = metadata["offensive_team"]
                 visitor_name = metadata["visitor"]["name"]
                 home_name = metadata["home"]["name"]
+                events_cur_round = metadata["event_result"]
+                events_splitted_list = events_cur_round.split("&")
                 print(home_name)
                 print(visitor_name)
                 print(offense_team)
@@ -233,7 +236,7 @@ def visual_info(data_rst):
                     print("visitor checked")
                     AgainstTeam.append(visitor_name)
                     print(AgainstTeam)
-                    events.append("attacking" )
+                    events.append(events_splitted_list[0])
                     print(events)
                     player_Name.append(player_mapping[event_player_num])
                     print(player_Name)
@@ -241,21 +244,18 @@ def visual_info(data_rst):
                     print("home checked")
                     AgainstTeam.append(home_name)
                     print(AgainstTeam)
-                    events.append("attacking" )
+                    events.append(events_splitted_list[0])
                     print(events)
                     player_Name.append(player_mapping[event_player_num])
                     print(player_Name)
     res['events'] = events
     res['player_Name'] = player_Name
     res['AgainstTeam'] = AgainstTeam
-
     print(res)
-
     return res
 
-
 def alignment(multiple_track):
-    # still hesitating whether implementation of this alignment can be done with in time
+    # still hesitating whether implementation of this alignment can be done before deadline
     # for now, do nothing
     # try to just match enough trajectories to overlap
     return multiple_track
