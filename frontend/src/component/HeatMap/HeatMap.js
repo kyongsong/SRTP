@@ -179,39 +179,8 @@ function HeatMap(){
             </Tabs.TabPane>
        
            <Tabs.TabPane tab="Pass Matrix  " key="3">
-           <Row>
-                <Col span={8}>
-                  <img src={AtlantaHawks}/>
-                  Atlanta Hawks
-                </Col>
-                <Col span={8} offset={6}>
-                <img src={DetroitPistons}/>
-                Detroit Pistons
-                </Col> 
-            </Row>
-            <Row>
-                <Col span={5} offset={2}>
-                <b>
-                  <Space>
-                  <DribbbleOutlined />
-                    36/85
-                  </Space>
-                
-                  
-                </b>
-                </Col>
-                <Col span={6} offset={9}>
-                <b>
-                <Space>
-                  <DribbbleOutlined />
-                    36/85
-                  </Space>
-                </b>
-                  
-                
-                </Col> 
-            </Row>
-            <div className='HeatMap'>
+          
+            <div className='PassMatrix'>
             <PassMatrix/>
               </div>
            </Tabs.TabPane>
@@ -251,7 +220,7 @@ function HeatMap(){
             </Row>
           </Tabs.TabPane>
     
-          <Tabs.TabPane tab="LineUp" key="5">
+          <Tabs.TabPane tab="Isolate" key="5">
           <Row>
                 <Col span={8}>
                   <img src={AtlantaHawks}/>
