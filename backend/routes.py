@@ -4,6 +4,7 @@ from typing import Any
 
 import flask
 from fastdtw import fastdtw
+from pprint import pprint
 from flask import jsonify, Response
 
 import dtw
@@ -16,6 +17,108 @@ index_value = 0
 
 # 比赛名称
 game_name = '0021500001'
+
+def matrix_generate_graph(current_round, Team):
+    # this mapping is used to map the sequence number used in the system to the number of the player on the court
+    # that is, the mapping is from playerid to seq_num, seq_num to jersey
+    player_mapping = {}  # playerid to seq_num
+
+    immediate_return_flag = False
+    # we need to adjust the current round to the proper round which matches the team argument
+    with open(os.path.join(game_name, str(current_round), "metadata.json"), "r") as f_test:
+        metadata = json.load(f_test)
+        offensive_team = metadata["offensive_team"]
+        while offensive_team != Team and current_round != 0:
+            with open(os.path.join(game_name, str(current_round), "metadata.json"), "r") as f_inner_test:
+                metadata = json.load(f_inner_test)
+                offensive_team = metadata["offensive_team"]
+                current_round = current_round - 1
+        if offensive_team != Team and current_round == 0:  # no data need to return
+            immediate_return_flag = True
+
+    # do the actual job of searching
+
+    # store the playerid of the player currently on the board
+    home_player_list = []
+    visitor_player_list = []
+    final_player_list = []
+    with open(os.path.join(game_name, str(current_round), "metadata.json"), "r") as f:
+        metadata = json.load(f)
+        home_team = metadata["home"]  # dict type
+        home_team_id = home_team["teamid"] # int type
+        visitor_team = metadata["visitor"]  # dict type
+        visitor_team_id = visitor_team["teamid"] # int type
+
+        movement = []
+        with open(os.path.join(game_name, str(current_round), "movement_refined_shot_clock.json"), "r") as f_mv:
+            movement = json.load(f_mv)
+        player_position_list = movement[0]["player_position"]
+        i = 0
+        while i < 10:
+            single_player_pos = player_position_list[i]
+            if single_player_pos[0] == home_team_id:
+                home_player_list.append(single_player_pos[1])
+            elif single_player_pos[0] == visitor_team_id:
+                visitor_player_list.append(single_player_pos[1])
+            else:
+                print("player's team id not matched, error")
+            i = i + 1
+
+        i = 0
+        while i < 13:
+            if Team == 'home':
+                final_player_list = home_player_list
+            elif Team == 'visitor':
+                final_player_list = visitor_player_list
+            i = i + 1
+
+    # initialization of the pass matrix
+    rst = [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0]
+    ]
+
+    if immediate_return_flag:
+        return rst
+
+    # do the passing statistics working
+    # first in order to make the pass matrix's value bigger, we use the passing data from 10 rounds before to current round
+    start_round = 0
+    if current_round >= 30:
+        start_round = current_round - 30
+    walk_round = start_round
+    # then walk all rounds and refresh the matrix
+    while walk_round <= current_round:
+        with open(os.path.join(game_name, str(walk_round), "metadata.json"), "r") as f:
+            metadata = json.load(f)
+            if metadata["offensive_team"] == Team:
+                with open(os.path.join(game_name, str(walk_round), "movement_refined_shot_clock.json"), "r") as f:
+                    movement_data = json.load(f)
+                    src = []  # the player who give the pass
+                    tgt = []  # the player who get the pass
+                    for frame in movement_data:
+                        if frame["ball_status"] == "get pass":
+                            tgt.append(final_player_list.index(frame["event_player"]))
+                            # do backwards searching for give pass
+                            frame_idx = movement_data.index(frame)
+                            index_backwards = frame_idx - 1
+                            while index_backwards >= 0 and movement_data[index_backwards]["ball_status"] != "give pass":
+                                index_backwards = index_backwards - 1
+                            # print("index backwards: " + str(index_backwards))
+                            src.append(final_player_list.index(movement_data[index_backwards]["event_player"]))
+                    # refresh the matrix according to the data retreived
+                    index_match = 0
+                    for player in src:
+                        rst[player][tgt[index_match]] = rst[player][tgt[index_match]] + 1
+                        index_match = index_match + 1
+        walk_round = walk_round + 1
+    return rst
+
+# debug
+# pprint(matrix_generate_graph(30, 'visitor'))
 
 # method:
 # we have the ball_status, and the status can show the fine-grained data frame
@@ -656,7 +759,19 @@ def add_routes(app):
             print(iso_results)
             return json.dumps(iso_results)
 
+        except Exception as _:
+            print(_)
+            return json.dumps({'message': 'failed'})
 
+    @app.route("/PassGraph", methods=['POST'])
+    def pass_graph() -> str:
+        try:
+            front_data = flask.request.get_json()
+            print(front_data)
+            current_round = front_data["current_round"]
+            Team = front_data["Team"]
+            rst = matrix_generate_graph(current_round, Team)
+            return json.dumps(rst)
         except Exception as _:
             print(_)
             return json.dumps({'message': 'failed'})
