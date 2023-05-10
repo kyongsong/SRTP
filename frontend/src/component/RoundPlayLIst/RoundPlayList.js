@@ -11,7 +11,7 @@ function RoundPlayList  (props) {
   useEffect(() => {
     var CardList=document.getElementById("List")
     if(props.Matching===""){
-      alert("No Result")
+     
       
     }
     else{
