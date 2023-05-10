@@ -16,62 +16,62 @@ function HeatMap(){
   
    useEffect(()=>{
     var PeriodData={'current_round':50};
-    // request.post('/ShotsMap', PeriodData).then(
-    //   res =>{
-    //     var x = [], y = [],status=[];
-    //     for(var i=0;i<res.data.shot_sucess.length;i++){
-    //       //读取后端数据
+    request.post('/ShotsMap', PeriodData).then(
+      res =>{
+        var x = [], y = [],status=[];
+        for(var i=0;i<res.data.shot_sucess.length;i++){
+          //读取后端数据
           
-    //       //转换坐标
-    //       x.push(res.data[i][0]*12.7)
-    //       y.push(res.data[i][1].y*13.44)
-    //       status.push("success");
+          //转换坐标
+          x.push(res.data[i][0]*12.7)
+          y.push(res.data[i][1].y*13.44)
+          status.push("success");
 
-    //     }
-    //     for(var i=0;i<res.data.shot_failed.length;i++){
-    //       //读取后端数据
+        }
+        for(var i=0;i<res.data.shot_failed.length;i++){
+          //读取后端数据
           
-    //       //转换坐标
-    //       x.push(res.data[i][0]*12.7)
-    //       y.push(res.data[i][1].y*13.44)
-    //       status.push("failed");
+          //转换坐标
+          x.push(res.data[i][0]*12.7)
+          y.push(res.data[i][1].y*13.44)
+          status.push("failed");
 
-    //     }
+        }
        
-    //     //绘制热点图
+        //绘制热点图
      
-    //     for (var i = 0; i < res.data.shot_sucess.length+res.data.shot_failed.length; i++) {
-    //         var size = 20;
-    //         var cx = x[i];
-    //         var cy = y[i] ;
+        for (var i = 0; i < res.data.shot_sucess.length+res.data.shot_failed.length; i++) {
+            var size = 20;
+            var cx = x[i];
+            var cy = y[i] ;
         
-    //         if (status[i]=="success") {
-    //           var color = "rgba(255, 0, 0, "   + ")";
+            if (status[i]=="success") {
+              var color = "rgba(255, 0, 0, "   + ")";
               
-    //           var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    //           circle.setAttribute("cx", cx);
-    //           circle.setAttribute("cy", cy);
-    //           circle.setAttribute("r", size);
-    //           circle.setAttribute("fill", color);
+              var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+              circle.setAttribute("cx", cx);
+              circle.setAttribute("cy", cy);
+              circle.setAttribute("r", size);
+              circle.setAttribute("fill", color);
            
               
-    //         }
-    //         else{
-    //           var color = "rgba(0, 0, 255)";
+            }
+            else{
+              var color = "rgba(0, 0, 255)";
               
-    //           var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    //           circle.setAttribute("cx", cx);
-    //           circle.setAttribute("cy", cy);
-    //           circle.setAttribute("r", size);
-    //           circle.setAttribute("fill", color);
-    //            document.getElementById("ShotMap").appendChild(circle);
+              var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+              circle.setAttribute("cx", cx);
+              circle.setAttribute("cy", cy);
+              circle.setAttribute("r", size);
+              circle.setAttribute("fill", color);
+               document.getElementById("ShotMap").appendChild(circle);
 
-    //         }
+            }
           
-    //     }
+        }
 
 
-    //   })
+      })
 
 
     request.post('/ShotsHeatMap', PeriodData).then(
