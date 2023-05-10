@@ -425,7 +425,8 @@ def add_routes(app):
             else :
                 # now do the multiple trajectories matching
                 multiple_rst = multiple_matching(track_multi)
-                info = visual_info(data_rst)
+                info = visual_info(multiple_rst)
+                print(multiple_rst)
                 return json.dumps({'status': 'success', 'data': multiple_rst, 'events': info['events'], 'player_Name': info['player_Name'], 'AgainstTeam': info['AgainstTeam']})
 
         except Exception as _:
