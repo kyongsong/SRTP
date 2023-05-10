@@ -388,6 +388,15 @@ def add_routes(app):
             print(_)
             return json.dumps({'message': 'failed'})
 
+    @app.route("/PassMatrix", methods=['POST'])
+    def pass_matrix() -> str:
+        try:
+            front_data = flask.request.get_json()
+            print(front_data)
+        except Exception as _:
+            print(_)
+            return json.dumps({'message': 'failed'})
+
     @app.route("/ShotsHeatMap", methods=['POST'])
     def shot_heat_map() -> str:
         try:
