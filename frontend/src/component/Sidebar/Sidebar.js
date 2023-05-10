@@ -1,4 +1,4 @@
-import { RedoOutlined , SettingOutlined, SearchOutlined,DribbbleOutlined ,EditOutlined,ToolOutlined,DashOutlined ,UserOutlined   } from '@ant-design/icons';
+import { RedoOutlined , RadarChartOutlined , SearchOutlined,DribbbleOutlined ,EditOutlined,ToolOutlined,DashOutlined ,UserOutlined   } from '@ant-design/icons';
 import { Menu, Drawer, Input} from 'antd';
 import React, { useState,useEffect } from 'react';
 import Wrapper from '../../assets/wrappers/SideBar.js';
@@ -33,7 +33,7 @@ const items = [
     
   ]),
   getItem('Matching', '8', <SearchOutlined />),
-  getItem('Analysis', '9', <SearchOutlined />),
+  getItem('Analysis', '9', <RadarChartOutlined />),
 ];
 
 // submenu keys of first level
