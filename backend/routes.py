@@ -585,7 +585,7 @@ def add_routes(app):
                                 break
                 index = index + 1
             print({"2pt&made": shot_2pt_made_pos, "2pt&miss": shot_2pt_miss_pos, "3pt&made": shot_3pt_made_pos, "3pt&miss": shot_3pt_miss_pos})
-            return json.dumps({"2pt&made": shot_2pt_made_pos, "2pt&miss": shot_2pt_miss_pos, "3pt&made": shot_3pt_made_pos, "3pt&miss": shot_3pt_miss_pos})
+            return json.dumps({"TwoMade": shot_2pt_made_pos, "TwoMiss": shot_2pt_miss_pos, "ThreeMade": shot_3pt_made_pos, "ThreeMiss": shot_3pt_miss_pos})
 
 
         except Exception as _:
@@ -595,6 +595,7 @@ def add_routes(app):
     @app.route("/isolate", methods=['POST'])
     def iso() -> str:
         try:
+            print("iso iso")
             round_ = flask.request.get_json()
             current_round = int(round_["current_round"])
             if current_round >= 19:
@@ -609,7 +610,7 @@ def add_routes(app):
                 with open(os.path.join('0021500001', str(index), 'metadata.json'), 'r') as f_meta:
                     metadata = json.load(f_meta)
                     event_result = str(metadata["event_result"])
-                    if event_result.find("foul") or (event_result.find("shot") and event_result.find("made")):
+                    if event_result.find("foul") == -1 or (event_result.find("shot") == -1 and event_result.find("made") == -1):
                         result = "made"
 
                 is_iso_round = False
@@ -651,7 +652,7 @@ def add_routes(app):
                             if cnt > metadata['possession_end_index']:
                                 break
                     iso_results.append({"iso_player":iso_player, "iso_trace":iso_trace, "iso_result": result})
-            index = index - 1
+                index = index - 1
             print(iso_results)
             return json.dumps(iso_results)
 
