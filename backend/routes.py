@@ -592,15 +592,12 @@ def add_routes(app):
             print(_)
             return json.dumps({'message': 'failed'})
 
-    @app.route("/Isolate", methods=['POST'])
+    @app.route("/isolate", methods=['POST'])
     def iso() -> str:
         try:
-            
+            print("iso iso")
             round_ = flask.request.get_json()
-            
-            current_round = round_["current_round"]
-            
-            
+            current_round = int(round_["current_round"])
             if current_round >= 19:
                 start_round = current_round - 19
             else:
@@ -608,7 +605,6 @@ def add_routes(app):
 
             iso_results = []
             index = current_round
-          
             while index >= start_round:
                 result = "miss"
                 with open(os.path.join('0021500001', str(index), 'metadata.json'), 'r') as f_meta:
@@ -652,12 +648,11 @@ def add_routes(app):
                         for frame in mvment:
                             if cnt >= max_strat and cnt <= max_end:
                                 iso_trace.append([frame["ball_position"][0], frame["ball_position"][1]])
-                                cnt = cnt + 1  # cnt = frame_id
-                                index=index+1
+                            cnt = cnt + 1  # cnt = frame_id
                             if cnt > metadata['possession_end_index']:
                                 break
                     iso_results.append({"iso_player":iso_player, "iso_trace":iso_trace, "iso_result": result})
-            index = index - 1
+                index = index - 1
             print(iso_results)
             return json.dumps(iso_results)
 
