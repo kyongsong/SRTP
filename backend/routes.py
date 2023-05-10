@@ -595,6 +595,7 @@ def add_routes(app):
     @app.route("/isolate", methods=['POST'])
     def iso() -> str:
         try:
+            print("iso iso")
             round_ = flask.request.get_json()
             current_round = int(round_["current_round"])
             if current_round >= 19:
@@ -651,7 +652,7 @@ def add_routes(app):
                             if cnt > metadata['possession_end_index']:
                                 break
                     iso_results.append({"iso_player":iso_player, "iso_trace":iso_trace, "iso_result": result})
-            index = index - 1
+                index = index - 1
             print(iso_results)
             return json.dumps(iso_results)
 
