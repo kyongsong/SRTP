@@ -35,7 +35,7 @@ function PassGraph(){
                             line.setAttribute("x2", PlayerPosition[j*2]);
                             line.setAttribute("y2", PlayerPosition[j*2+1]);
                             line.setAttribute("stroke", "blue");
-                            var Size=""+value[j]*4
+                            var Size=""+value[j]*10
                             line.setAttribute("stroke-width", Size);
                             document.getElementById("PassGraph").appendChild(line);
                             
