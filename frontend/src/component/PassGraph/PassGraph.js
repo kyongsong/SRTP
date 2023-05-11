@@ -12,42 +12,11 @@ import Away3 from "../../assets/Away3.png"
 import Away4 from "../../assets/Away4.png"
 import Away5 from "../../assets/Away5.png"
 
-
+var store = window.localStorage
 function PassGraph(){
     useEffect(()=>{
-        // let PlayerPosition=[];
-        // PlayerPosition=[100,150,100,350,100,550,350,250,350,450];
-
-        // var arr2 = [
-        //     [0, 2, 3,4,6],
-        //     [1, 0, 3,4,6],
-        //     [1, 2, 0,4,6],
-        //     [1, 2, 3,0,6],
-        //     [1, 2, 3,4,0],
-        //   ];
-        
-
-        // for(var i=0;i<5;i++){                
-        //     var value=arr2[i]
-          
-        //     for(var j=0;j<5;j++){
-        //         if(i!=j){
-        //             var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        //             line.setAttribute("x1", PlayerPosition[i*2]);
-        //             line.setAttribute("y1", PlayerPosition[i*2+1]);
-        //             line.setAttribute("x2", PlayerPosition[j*2]);
-        //             line.setAttribute("y2", PlayerPosition[j*2+1]);
-        //             var Size=""+value[j]
-        //             line.setAttribute("stroke-width", Size);
-        //             line.setAttribute("stroke", "blue");
-        //             console.log(line)
-        //             document.getElementById("PassGraph").appendChild(line);
-                    
-
-        //         }
-        //     }
-        // }
-        var PeriodData={'current_round':110,"Team":'home'};
+        var event=parseInt(store.getItem("event_id"))
+        var PeriodData={'current_round':event,"Team":'home'};
         request.post('/PassGraph', PeriodData).then(
             res =>{
               
@@ -66,7 +35,7 @@ function PassGraph(){
                             line.setAttribute("x2", PlayerPosition[j*2]);
                             line.setAttribute("y2", PlayerPosition[j*2+1]);
                             line.setAttribute("stroke", "blue");
-                            var Size=""+value[j]*10
+                            var Size=""+value[j]*4
                             line.setAttribute("stroke-width", Size);
                             document.getElementById("PassGraph").appendChild(line);
                             

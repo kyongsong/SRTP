@@ -15,10 +15,11 @@ import Player12 from "../../assets/Player12.png"
 import Player13 from "../../assets/Player13.png"
 
 
-
+var store = window.localStorage
 function PassMatrix(){
      useEffect(()=>{
-        var PeriodData={'current_round':110,"Team":'home'};
+        var event=parseInt(store.getItem("event_id"))
+        var PeriodData={'current_round':event,"Team":'home'};
         request.post('/PassMatrix', PeriodData).then(
             res =>{
                 var length=13;

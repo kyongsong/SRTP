@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import request from "../../utils/request";
 import BasketballBg from '../../page/BasketballPage/BasketballBackground2.jpg'
 import Player1 from "../../assets/Player1.png"
-
+var store = window.localStorage
 function Isolate(){
     useEffect(()=>{
-        var PeriodData={'current_round':120};
+        var PeriodData={'current_round':store.getItem("event_id")};
       
         request.post('/isolate', PeriodData).then(
             res =>{

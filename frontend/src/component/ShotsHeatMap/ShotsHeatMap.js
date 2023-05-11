@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import request from "../../utils/request";
 import BasketballBg from '../../page/BasketballPage/BasketballBackground2.jpg'
+var store = window.localStorage
 function ShotsHeatMap(){
     useEffect(()=>{
-        var PeriodData={'current_round':50};
+        var PeriodData={'current_round':store.getItem("event_id")};
         request.post('/ShotsHeatMap', PeriodData).then(
             res =>{
                 console.log(res)
