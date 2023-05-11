@@ -1,4 +1,36 @@
-# 1. BasketBall Analysing System
+# BasketBall Analysing System
+
+## **项目实施结果概述：**
+
+**当前我们的系统后端由python搭建，前端由React+Antd搭建，形成了一个良好的篮球轨迹检索和球场数据分析系统。其中，后端提供了多种检索算法的接口，前端能够支持基于草图的轨迹查询以及对于篮球比赛相关数据的可视分析结果。**  
+
+
+
+## **本项目主要研究内容如下：**
+
+1. **在后端，我们优化了轨迹检索方案，设计了多种检索算法：**
+
+（1）**基于时间序列的DTW算法，其基本思路是将两个序列进行伸缩变换进行对齐，然后计算对其后的序列的欧氏距离。**
+
+（2）**基于深度学习框架的Encoder算法，具体来说，就是通过深度学习的方法，将一个序列映射到特定维度的向量空间，然后进行向量的相似度比较。**
+
+（3）**基于轨迹几何特征的算法。将两个坐标序列转换为轨迹，然后比较这两条轨迹的形状。包括计算轨迹的几何特征，如面积、周长、曲率等，并计算它们之间的差异。**
+
+（4）**将坐标序列转化为一个图形（例如使用欧几里得距离来表示节点之间的距离），然后使用图形匹配算法（例如图形同构算法或者最大权重匹配算法）来计算两个图形的相似度。**
+
+**最后，我们分析了不同算法在检索时间、得到的结果质量等方面的优劣，以及它们在不同场景下的应用意义。**
+
+
+
+2. **在前端，我们通过React + Antd优化了前端的设计，使得整体界面的美观度和交互性大幅提升。具体来说，当前的前端系统分成sketch-based检索系统与可视化分析系统两个模块。**
+
+（1）**在sketch-based检索系统中，我们支持手绘多条球员运动轨迹作为查询的输入，在后端通过高效的算法匹配数据库中的相应回合，并将其返回以动画形式进行呈现。该模块非常契合教练员在球场上画战术板的模式，在篮球比赛实战分析中具有非常大的潜力。**
+
+**（2）在可视化分析系统中，我们充分利用了数据库中大量的细粒度球员赛场数据，分析产生一系列重要的球场数据，例如球员在特定场景下的命中率预测，同类型战术在不同场景下的得分效率等等。我们还结合ECHARTS组件和svg对分析结果进行可视化呈现。传统数据分析方式通常比较枯燥和简单，我们通过可视化的方案，能够让篮球数据分析更加直观，方便教练员和篮球专家进行数据提取和分析。**
+
+
+
+## 系统概述
 
 文件目录如下
 
@@ -13,21 +45,21 @@
 	 |------ReadME.md
 ```
 
-## 1.0 文件夹说明
+### 1.0 文件夹说明
 
 1. frontend文件夹
 2. backend文件夹
 
-## 1.1 如何运行？
+### 1.1 如何运行？
 
 1. 进入frontend文件夹，输入 `npm i` 安装依赖包
 2. `npm run start` 将react项目run起来即可
 3. 如果在调试前端功能的时候，只需要跑 `react`项目即可，无需跑后端
 4. 如果需要测试前后端项目的时候，需要进入 `backend`文件夹，将 `app.py`文件跑起即可
 
-## 1.2 编写时注意事项
+### 1.2 编写时注意事项
 
-### 1.2.1 前后端交互数据格式-JSON
+#### 1.2.1 前后端交互数据格式-JSON
 
 + @app.route("/ShotsMap", methods=['POST'])
 
@@ -44,7 +76,7 @@
 
     ```
     {"2pt&made": shot_2pt_made_pos, "2pt&miss": shot_2pt_miss_pos, "3pt&made": shot_3pt_made_pos, "3pt&miss": shot_3pt_miss_pos}
-
+    
     shot_2pt_made_pos = [[x1,y1], [x2,y2], ...], shot_2pt_miss_pos ...
     ```
 
@@ -130,28 +162,21 @@
   + 提交格式
 
     ```
-
+    {
+    'current_round':x
+    }
     ```
+  
+  - 返回格式
 
-  {
-  'current_round':x
-  }
-
+  
   ```
-
-  + 返回格式
-
-  ```
-
   [{"iso_player":james, "iso_trace":[[x,y],[x,y]....], "iso_result": made/miss},
   {"iso_player":curry, "iso_trace":[[x,y],[x,y]....], "iso_result": made/miss},
   {"iso_player":irving, "iso_trace":[[x,y],[x,y]....], "iso_result": made/miss} ...]
-
   ```
-
+  
   isolate的含义是单打，即我们会去寻找当前回合前20个回合的球星单打轨迹，并将单打结果返回给前端，包括单打球员名字、单打轨迹、单打结果（made和miss两种情况），前端绘制时，只需要在球场上绘制轨迹，在轨迹起点标注球员名字，红色表达单打成功，黑色表示单打失败
-
-  ```
 + @app.route("/Match", methods=['POST'])
 
   + 提交格式
@@ -187,7 +212,7 @@
     {"status": "success", "data": [["65", 51, 149], ["15", 54, 123]], "events": ["Atlanta Hawksattacking on Round 65", "Atlanta Hawksattacking on Round 15"], "player_Name": ["Steve Blake", "Reggie Jackson"], "AgainstTeam": ["Detroit Pistons", "Detroit Pistons"]}
     ```
 
-### 1.2.2 有关转换坐标的问题
+#### 1.2.2 有关转换坐标的问题
 
 由于我们需要在战术板上画球员轨迹，并把符合轨迹的场面显示在浏览器中。因此涉及转换坐标的有以下几个关系。
 
@@ -206,7 +231,7 @@
       const windowToCanvas = (canvas, x, y) => {
               let rect = canvas.getBoundingClientRect()          
               return {
-
+      
                       x: x - rect.left * (canvas.width/rect.width),
                       y: y - rect.top * (canvas.height/rect.height)
               }
@@ -238,80 +263,3 @@
     球场(94,50)
     ```
 
-### 1.3 仍需要解决问题
-
-#### 1.前端
-
-+ Basketball Image从left 200px 调整为了 380px 后续的一系列参数需要调整
-
-  + 可能会出现画的轨迹和检索轨迹不符合
-+ ScoreBoard的实现
-
-  + 比分部分还没有实现
-+ RoundPlay List的前后端衔接
-
-  + RoundPlay List 改成弹窗的形式（实现）
-  + 点击跳转的页面-需要完成点击窗户收回
-  + 后续可添加预览图
-+ PlayProgressBar 完成
-+ 绘制PassMatrix
-
-  ```
-  要在SVG中绘制一个带有13x13矩阵表格的矩阵，您可以使用SVG的rect元素来创建小正方形，并使用循环来创建多个小正方形，并根据数值设置每个小正方形的颜色。以下是一个示例SVG代码，它创建了一个13x13矩阵表格，每个小正方形根据其值被渲染为不同的颜色：
-
-  <svg width="500" height="500" viewBox="0 0 500 500">
-    <!-- 绘制网格线 -->
-    <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
-    <rect x="50" y="50" width="400" height="400" fill="#F0F0F0" />
-    <g>
-      <!-- 绘制矩阵内容 -->
-      <text x="10" y="30" font-size="12" fill="#000">球员</text>
-      <text x="30" y="30" font-size="12" fill="#000">位置</text>
-      <text x="50" y="30" font-size="12" fill="#000">1</text>
-      <text x="160" y="30" font-size="12" fill="#000">13</text>
-      <text x="5" y="60" font-size="12" fill="#000">1</text>
-      <text x="5" y="170" font-size="12" fill="#000">13</text>
-      <!-- 循环绘制小正方形 -->
-      <g>
-        <!-- 13x13小正方形表格内容 -->
-        <rect x="50" y="50" width="30" height="30" fill="#d9efff" stroke="#000000" />
-        <text x="65" y="70" fill="#000" font-size="10">球员1</text>
-        <text x="55" y="80" fill="#000" font-size="10">位置1</text>
-        <text x="55" y="90" fill="#000" font-size="10">5</text>
-      </g>
-      <!-- 内部循环 -->
-      <g transform="translate(0, 30)">
-        <!-- 13x13小正方形表格内容 -->
-        <rect x="50" y="50" width="30" height="30" fill="#a7ea7f" stroke="#000000" />
-        <text x="65" y="70" fill="#000" font-size="10">球员2</text>
-        <text x="55" y="80" fill="#000" font-size="10">位置2</text>
-        <text x="55" y="90" fill="#000" font-size="10">10</text>
-      </g>
-      <!-- 循环结束 -->
-    </g>
-    <!-- 绘制图例内容 -->
-    <g>
-      <rect x="50" y="450" width="20" height="20" fill="#d9efff" stroke="#000000" />
-      <text x="80" y="465" fill="#000" font-size="10">数值最小</text>
-    </g>
-    <g>
-      <rect x="150" y="450" width="20" height="20" fill="#a7ea7f" stroke="#000000" />
-      <text x="180" y="465" fill="#000" font-size="10">数值较小</text>
-    </g>
-    <g>
-      <rect x="250" y="450" width="20" height="20" fill="#61c750" stroke="#000000" />
-      <text x="280" y="465" fill="#000" font-size="10">数值中等</text>
-    </g>
-    <g>
-      <rect x="350" y="450" width="20" height="20" fill="#004F33" stroke="#000000" />
-      <text x="380" y="465" fill="#000" font-size="10">数值最大</text>
-    </g>
-  </svg>
-  在上面的示例中，我们使用了text元素来创建表格的标题、行名、列名和图例，使用了rect元素来创建矩形背景和小正方形、使用fill属性设置小正方形的填充色，根据不同的值设置了不
-  ```
-
-#### 2.后端
-
-+ backend算法实现
-  + alignment需要进行实现以期得到更好的效果
-  + 需要实现基于hash的系统加速使得原先在一场比赛上进行检索的系统拓展到多系统
